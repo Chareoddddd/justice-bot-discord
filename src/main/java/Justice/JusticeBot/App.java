@@ -94,7 +94,7 @@ public class App extends ListenerAdapter
 		build.addField(prefix + "prefixe", "Modifie le préfixe", false);
 		/*build.addField(prefix + "punir", "Enlève la citoyenneté et met en Sous-Race (Administrateur requis)", false);
 		build.addField(prefix + "pardon", "Enlève Sous-Race et met la citoyenneté (Administrateur requis)", false);*/
-		build.addField(prefix + "poll 'Question' 'Réponse 1' 'Réponse 2' ...", "Effectue un poll", false);
+		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll", false);
 		build.addField(prefix + "rule34 tags", "Recherche une image sur rule34 en utilisant les tags fournis", false);
 		msgChannel.sendMessage(build.build()).queue();
 	}
