@@ -1,9 +1,26 @@
 package Justice.JusticeBot;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.security.auth.login.LoginException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -29,7 +46,7 @@ public class App extends ListenerAdapter
 	
     public static void main( String[] args ) throws LoginException, InterruptedException
     {
-    	JDA Bot = new JDABuilder(AccountType.BOT).setToken(System.getenv("BOT_TOKEN")).build();
+    	JDA Bot = new JDABuilder(AccountType.BOT).setToken("MzM3NTU0ODY3NTE2MjExMjAw.XTrecw.khvMQah-lEn1zD97UOYo3lpCy_w").build();
         Bot.addEventListener(new App());
         Bot.getPresence().setGame(Game.watching("ce serveur et le juge (Prefixe : " + prefix + ")"));
     }
@@ -49,12 +66,14 @@ public class App extends ListenerAdapter
     			if (orders[0].equals("prefixe")) {
     				if (orders.length >= 2)
     					prefixe(orders[1], e, msgChannel);
-    			} else if (orders[0].equals("punir") && e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+    			} /*else if (orders[0].equals("punir") && e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
     				punir(e, msg, msgChannel, msgUser, mentionedMembers);
     			} else if (orders[0].equals("pardon") && e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
     				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
-    			} else if (orders[0].equals("poll") && orders.length >= 2 && orders.length <= 27) {
+    			}*/ else if (orders[0].equals("poll") && orders.length >= 2 && orders.length <= 27) {
     				poll(e, msg, msgChannel, msgUser, mentionedMembers);
+    			} else if (orders[0].equals("rule34")) {
+    				rule34(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals("help")) {
     				help(msgChannel);
     			} else {
@@ -77,9 +96,10 @@ public class App extends ListenerAdapter
 		
 		build.setTitle("**Liste des Commandes**");
 		build.addField(prefix + "prefixe", "Modifie le préfixe", false);
-		build.addField(prefix + "punir", "Enlève la citoyenneté et met en Sous-Race (Administrateur requis)", false);
-		build.addField(prefix + "pardon", "Enlève Sous-Race et met la citoyenneté (Administrateur requis)", false);
+		/*build.addField(prefix + "punir", "Enlève la citoyenneté et met en Sous-Race (Administrateur requis)", false);
+		build.addField(prefix + "pardon", "Enlève Sous-Race et met la citoyenneté (Administrateur requis)", false);*/
 		build.addField(prefix + "poll 'Question' 'Réponse 1' 'Réponse 2' ...", "Effectue un poll", false);
+		build.addField(prefix + "rule34 tags", "Recherche une image sur rule34 en utilisant les tags fournis", false);
 		msgChannel.sendMessage(build.build()).queue();
 	}
     
@@ -96,7 +116,7 @@ public class App extends ListenerAdapter
 		msgChannel.sendMessage(build.build()).queue();
     }
     
-    public void punir(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers) {
+    /*public void punir(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers) {
     	EmbedBuilder build = new EmbedBuilder();
 		
     	String names = "";
@@ -142,7 +162,7 @@ public class App extends ListenerAdapter
 			build.setDescription(names + " a(ont) été deban.");
 		}
 		msgChannel.sendMessage(build.build()).queue();
-    }
+    }*/
     
     public void poll (MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers) {
     	
@@ -193,4 +213,55 @@ public class App extends ListenerAdapter
 			
     }
     
+    public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
+    	Message m;
+    	EmbedBuilder build = new EmbedBuilder();
+		build.setColor(0xfc0cee);
+		String tag = "";
+		String imageUrl = "";
+		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100&tags=";
+		
+		if (orders.length >= 2) {
+			tag = tag + orders[1];
+		}
+		for (int i = 2; i < orders.length; i++) {
+			tag = tag + ", " + orders[i];
+			uri = uri + "+" + orders[i];
+		}
+		
+		URL url = new URL(uri);
+		HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
+
+		httpConnection.setRequestMethod("GET");
+		httpConnection.setRequestProperty("Accept", "application/xml");
+
+		InputStream xml = httpConnection.getInputStream();
+		System.out.println(xml);
+		
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db = dbf.newDocumentBuilder();
+		Document doc = db.parse(xml);
+		doc.getDocumentElement().normalize();
+
+		System.out.println(doc.getDocumentElement().getNodeName());
+		
+		NodeList nodeList = doc.getDocumentElement().getChildNodes();
+		
+		Random rand = new Random();
+		int x = rand.nextInt(100);
+		Node node = nodeList.item(x);
+		
+		NamedNodeMap nodeMap = node.getAttributes();
+		nodeMap.getNamedItem("file_url");
+		
+		imageUrl = nodeMap.getNamedItem("file_url").toString().substring(9).substring(0, imageUrl.length() - 1);
+		
+		build.setImage(imageUrl);
+		
+		if (!tag.equals("")) {
+			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
+		} else {
+			m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
+		}
+    }
 }
