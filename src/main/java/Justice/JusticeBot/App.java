@@ -222,7 +222,7 @@ public class App extends ListenerAdapter
 		String tag = "";
 		String imageUrl = "";
 		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100&tags=";
-		int count = 0;
+		Random rand = new Random();
 		
 		if (orders.length >= 2) {
 			tag = tag + orders[1];
