@@ -81,13 +81,7 @@ public class App extends ListenerAdapter
     			}
     		}
     	} catch (Exception ex) {
-    		if (ex instanceof InsufficientPermissionException) {
-    			msgChannel.sendMessage(msgUser.getAsMention() + ", permissions du bot insuffisantes").queue();
-    		} else if (ex instanceof HierarchyException) {
-    			msgChannel.sendMessage(msgUser.getAsMention() + ", le rôle **Justice** doit être placé au dessus des rôles à modifier").queue();
-    		} else {
-			msgChannel.sendMessage(msgUser.getAsMention() + ", une erreur inconnue a été rencontrée").queue();
-		}
+ 
     	}
     }
     
