@@ -249,7 +249,7 @@ public class App extends ListenerAdapter
 		
 		Random rand = new Random();
 		Node node;
-		int l;
+		int l = 0;
     		do {
     			int x = rand.nextInt(100);
         		node = nodeList.item(x);
