@@ -239,14 +239,11 @@ public class App extends ListenerAdapter
 		httpConnection.setRequestProperty("Accept", "application/xml");
 
 		InputStream xml = httpConnection.getInputStream();
-		System.out.println(xml);
 		
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		Document doc = db.parse(xml);
 		doc.getDocumentElement().normalize();
-
-		System.out.println(doc.getDocumentElement().getNodeName());
 		
 		NodeList nodeList = doc.getDocumentElement().getChildNodes();
 		
@@ -257,14 +254,14 @@ public class App extends ListenerAdapter
 		NamedNodeMap nodeMap = node.getAttributes();
 		nodeMap.getNamedItem("file_url");
 		
-		imageUrl = nodeMap.getNamedItem("file_url").toString().substring(9).substring(0, imageUrl.length() - 1);
+		imageUrl = nodeMap.getNamedItem("file_url").toString().substring(9);
 		
-		//build.setImage(imageUrl);
+		build.setImage(imageUrl);
 		
 		if (!tag.equals("")) {
-			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).build();
+			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
 		} else {
-			m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").build();
+			m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
 		}
 		msgChannel.sendMessage(m).queue();
     }
