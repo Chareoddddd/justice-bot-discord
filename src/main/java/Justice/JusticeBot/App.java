@@ -213,7 +213,7 @@ public class App extends ListenerAdapter
     	Message m;
     	EmbedBuilder build = new EmbedBuilder();
 		build.setColor(0xfc0cee);
-		build.setFooter("Demandé de " + msgUser.getName(), msgUser.getAvatarUrl());
+		build.setFooter("Demandé par " + msgUser.getName(), msgUser.getAvatarUrl());
 		String tag = "";
 		String imageUrl = "";
 		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100&tags=";
