@@ -76,10 +76,10 @@ public class App extends ListenerAdapter
 		build.setColor(0xaa51e2);
 		
 		build.setTitle("**Liste des Commandes**");
-		build.addField("j+prefix", "Modifie le préfixe", false);
-		build.addField("j+punir", "Enlève la citoyenneté et met en Sous-Race (Administrateur requis)", false);
-		build.addField("j+pardon", "Enlève Sous-Race et met la citoyenneté (Administrateur requis)", false);
-		build.addField("j+poll 'Question' 'Réponse 1' 'Réponse 2' ...", "Effectue un poll", false);
+		build.addField(prefixe + "prefix", "Modifie le préfixe", false);
+		build.addField(prefixe + "punir", "Enlève la citoyenneté et met en Sous-Race (Administrateur requis)", false);
+		build.addField(prefixe + "pardon", "Enlève Sous-Race et met la citoyenneté (Administrateur requis)", false);
+		build.addField(prefixe + "poll 'Question' 'Réponse 1' 'Réponse 2' ...", "Effectue un poll", false);
 		msgChannel.sendMessage(build.build()).queue();
 	}
     
