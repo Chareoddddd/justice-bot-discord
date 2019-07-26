@@ -259,7 +259,7 @@ public class App extends ListenerAdapter
 		
 		imageUrl = nodeMap.getNamedItem("file_url").toString().substring(9);
 		
-		build.setImage(imageUrl);
+		build.setImage("https://img.rule34.xxx/images/2967/6e1fa6f40a655575701d657a298d000ef42db32b.jpg");
 		
 		if (!tag.equals("")) {
 			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
