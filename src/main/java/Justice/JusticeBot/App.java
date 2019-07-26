@@ -183,7 +183,7 @@ public class App extends ListenerAdapter
 			}
 		} else {
 			build.setTitle("**" + orders[1] + "**");
-			Message m = new MessageBuilder().append(e.getGuild().getRolesByName("everyone", false) + ", un nouveau poll a été lancé!").setEmbed(build.build()).build();
+			Message m = new MessageBuilder().append("@everyone, un nouveau poll a été lancé!").setEmbed(build.build()).build();
 			msgChannel.sendMessage(m).queue();
 			List<Message> sendMessages = msgChannel.getHistory().retrievePast(3).complete();
 			Message sendMes = sendMessages.get(0);
