@@ -46,7 +46,7 @@ public class App extends ListenerAdapter
 	
     public static void main( String[] args ) throws LoginException, InterruptedException
     {
-    	JDA Bot = new JDABuilder(AccountType.BOT).setToken("MzM3NTU0ODY3NTE2MjExMjAw.XTrecw.khvMQah-lEn1zD97UOYo3lpCy_w").build();
+    	JDA Bot = new JDABuilder(AccountType.BOT).setToken(System.getenv("BOT_TOKEN")).build();
         Bot.addEventListener(new App());
         Bot.getPresence().setGame(Game.watching("ce serveur et le juge (Prefixe : " + prefix + ")"));
     }
