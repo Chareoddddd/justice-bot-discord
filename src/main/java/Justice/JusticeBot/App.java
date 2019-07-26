@@ -190,7 +190,7 @@ public class App extends ListenerAdapter
 				mes = mes + letters[i-2] + orders[i] + System.getProperty("line.separator");
 			}
 			build.addField("**" + orders[1] + "**", mes, false);
-			Message m = new MessageBuilder().append("@everyone, un nouveau poll a été lancé!").setEmbed(build.build()).build();
+			Message m = new MessageBuilder().append("Un nouveau poll a été lancé!").setEmbed(build.build()).build();
 			msgChannel.sendMessage(m).queue();
 			List<Message> sendMessages = msgChannel.getHistory().retrievePast(3).complete();
 			Message sendMes = sendMessages.get(0);
@@ -199,7 +199,7 @@ public class App extends ListenerAdapter
 			}
 		} else {
 			build.setTitle("**" + orders[1] + "**");
-			Message m = new MessageBuilder().append("@everyone, un nouveau poll a été lancé!").setEmbed(build.build()).build();
+			Message m = new MessageBuilder().append("Un nouveau poll a été lancé!").setEmbed(build.build()).build();
 			msgChannel.sendMessage(m).queue();
 			List<Message> sendMessages = msgChannel.getHistory().retrievePast(3).complete();
 			Message sendMes = sendMessages.get(0);
