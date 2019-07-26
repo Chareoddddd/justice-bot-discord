@@ -223,6 +223,7 @@ public class App extends ListenerAdapter
 		
 		if (orders.length >= 2) {
 			tag = tag + orders[1];
+			uri = uri + orders[1];
 		}
 		for (int i = 2; i < orders.length; i++) {
 			tag = tag + ", " + orders[i];
