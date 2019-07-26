@@ -249,18 +249,19 @@ public class App extends ListenerAdapter
 		
 		Random rand = new Random();
 		Node node;
-		int l = 0;
-    		do {
-    			int x = rand.nextInt(100);
-        		node = nodeList.item(x);
-        		NamedNodeMap nodeMap = node.getAttributes();
-        		nodeMap.getNamedItem("file_url");
-			if (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredElementImpl){
-				imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
-        			l = imageUrl.length();
-        			imageUrl = imageUrl.substring(0, l-1);
-			}
-    		} while ((node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl) || (!imageUrl.substring(l-4).equals("jpeg") && !imageUrl.substring(l-3).equals("png")));
+		int l;
+		do {
+    			do {
+    				int x = rand.nextInt(100);
+        			node = nodeList.item(x);
+        			NamedNodeMap nodeMap = node.getAttributes();
+        			nodeMap.getNamedItem("file_url");
+    			} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
+			imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
+        		l = imageUrl.length();
+        		imageUrl = imageUrl.substring(0, l-1);
+		} while (!imageUrl.substring(l-4).equals("jpeg") || !imageUrl.substring(l-3).equals("png"));
+    		
 		
 		build.setImage(imageUrl);
 		
