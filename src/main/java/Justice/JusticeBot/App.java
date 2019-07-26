@@ -242,7 +242,7 @@ public class App extends ListenerAdapter
 		
 		NodeList nodeList = doc.getDocumentElement().getChildNodes();
 		
-		if (nodeList.getLength() == 0){
+		if (nodeList.getLength() > 0){
 			Node node;
 			int l;
 			NamedNodeMap nodeMap;
