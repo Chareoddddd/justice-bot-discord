@@ -53,12 +53,12 @@ public class App extends ListenerAdapter
     
     public void onMessageReceived(MessageReceivedEvent e) 
     {
-    	Message msg = e.getMessage();
+    	try {
+    		Message msg = e.getMessage();
 		MessageChannel msgChannel = e.getChannel();
 		User msgUser = e.getAuthor();
 		List<Member> mentionedMembers = msg.getMentionedMembers();
 		
-    	try {
        		String msgString = msg.getContentRaw();
     		if (msgString.length() >= prefix.length() && msgString.substring(0, prefix.length()).equals(prefix)) {	//on a une commande
     			msg.delete().queue();
