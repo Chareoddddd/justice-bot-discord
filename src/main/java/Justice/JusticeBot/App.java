@@ -85,7 +85,9 @@ public class App extends ListenerAdapter
     			msgChannel.sendMessage(msgUser.getAsMention() + ", permissions du bot insuffisantes").queue();
     		} else if (ex instanceof HierarchyException) {
     			msgChannel.sendMessage(msgUser.getAsMention() + ", le rôle **Justice** doit être placé au dessus des rôles à modifier").queue();
-    		}
+    		} else {
+			msgChannel.sendMessage(msgUser.getAsMention() + ", une erreur inconnue a été rencontrée").queue();
+		}
     	}
     }
     
@@ -257,12 +259,12 @@ public class App extends ListenerAdapter
 		
 		imageUrl = nodeMap.getNamedItem("file_url").toString().substring(9).substring(0, imageUrl.length() - 1);
 		
-		build.setImage(imageUrl);
+		//build.setImage(imageUrl);
 		
 		if (!tag.equals("")) {
-			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
+			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).build();
 		} else {
-			m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
+			m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").build();
 		}
 		msgChannel.sendMessage(m).queue();
     }
