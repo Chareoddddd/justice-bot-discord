@@ -106,7 +106,7 @@ public class App extends ListenerAdapter
     	
     	prefix = p;
     	
-    	e.getJDA().getPresence().setGame(Game.watching("ce serveur et le juge (Prefixe : " + prefix + ")"));
+    	e.getJDA().getPresence().setGame(Game.watching(prefix + "help"));
     	build.setColor(0x00d2ff);
 		build.setDescription(message);
 		msgChannel.sendMessage(build.build()).queue();
@@ -211,70 +211,75 @@ public class App extends ListenerAdapter
     
     public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
     	Message m;
-    	EmbedBuilder build = new EmbedBuilder();
-		build.setColor(0xfc0cee);
-		build.setFooter("Demandé par " + msgUser.getName(), msgUser.getAvatarUrl());
-		String tag = "";
-		String imageUrl = "";
-		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100&tags=";
-		Random rand = new Random();
-		
-		if (orders.length >= 2) {
-			tag = tag + orders[1];
-			uri = uri + orders[1];
-		}
-		for (int i = 2; i < orders.length; i++) {
-			tag = tag + ", " + orders[i];
-			uri = uri + "+" + orders[i];
-		}
-		
-		URL url = new URL(uri);
-		HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
+    	if (e.getTextChannel().isNSFW()) {
+        	EmbedBuilder build = new EmbedBuilder();
+    		build.setColor(0xfc0cee);
+    		build.setFooter("Demandé par " + msgUser.getName(), msgUser.getAvatarUrl());
+    		String tag = "";
+    		String imageUrl = "";
+    		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100&tags=";
+    		Random rand = new Random();
+    		
+    		if (orders.length >= 2) {
+    			tag = tag + orders[1];
+    			uri = uri + orders[1];
+    		}
+    		for (int i = 2; i < orders.length; i++) {
+    			tag = tag + ", " + orders[i];
+    			uri = uri + "+" + orders[i];
+    		}
+    		
+    		URL url = new URL(uri);
+    		HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
 
-		httpConnection.setRequestMethod("GET");
-		httpConnection.setRequestProperty("Accept", "application/xml");
+    		httpConnection.setRequestMethod("GET");
+    		httpConnection.setRequestProperty("Accept", "application/xml");
 
-		InputStream xml = httpConnection.getInputStream();
-		
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		Document doc = db.parse(xml);
-		doc.getDocumentElement().normalize();
-		
-		NodeList nodeList = doc.getDocumentElement().getChildNodes();
-		
-		if (nodeList.getLength() > 0){
-			Node node;
-			int l;
-			NamedNodeMap nodeMap;
-			do {
-    				do {
-    					int x = rand.nextInt(nodeList.getLength());
-        				node = nodeList.item(x);
-    				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
-    				nodeMap = node.getAttributes();
-    				nodeMap.getNamedItem("file_url");
-    				imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
-        			l = imageUrl.length();
-        			imageUrl = imageUrl.substring(0, l-1);
-    			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png"));
-		
-			build.setImage(imageUrl);
-		
-			if (!tag.equals("")) {
-				m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
-			} else {
-				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
-			}
-			msgChannel.sendMessage(m).queue();
-		} else {
-			Message error;
-			if (!tag.equals("")) {
-				error = new MessageBuilder().append("Aucun résultat avec les tags : " + tag).build();
-			} else {
-				error = new MessageBuilder().append("Aucun résultat sans tags (wtf?)").build();
-			}
-			msgChannel.sendMessage(error).queue();
-		}
+    		InputStream xml = httpConnection.getInputStream();
+    		
+    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    		DocumentBuilder db = dbf.newDocumentBuilder();
+    		Document doc = db.parse(xml);
+    		doc.getDocumentElement().normalize();
+    		
+    		NodeList nodeList = doc.getDocumentElement().getChildNodes();
+    		
+    		if (nodeList.getLength() > 0){
+    			Node node;
+    			int l;
+    			NamedNodeMap nodeMap;
+    			do {
+        				do {
+        					int x = rand.nextInt(nodeList.getLength());
+            				node = nodeList.item(x);
+        				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
+        				nodeMap = node.getAttributes();
+        				nodeMap.getNamedItem("file_url");
+        				imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
+            			l = imageUrl.length();
+            			imageUrl = imageUrl.substring(0, l-1);
+        			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png"));
+    		
+    			build.setImage(imageUrl);
+    		
+    			if (!tag.equals("")) {
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
+    			} else {
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
+    			}
+    			msgChannel.sendMessage(m).queue();
+    		} else {
+    			Message error;
+    			if (!tag.equals("")) {
+    				error = new MessageBuilder().append("Aucun résultat avec les tags : " + tag).build();
+    			} else {
+    				error = new MessageBuilder().append("Aucun résultat sans tags (wtf?)").build();
+    			}
+    			msgChannel.sendMessage(error).queue();
+    		}
+    	} else {
+    		m = new MessageBuilder().append(msgUser.getAsMention() + ", ce n'est pas un canal NSFW").build();
+		msgChannel.sendMessage(m).queue();
+    	}
     }
 }
