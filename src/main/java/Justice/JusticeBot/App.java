@@ -242,29 +242,38 @@ public class App extends ListenerAdapter
 		
 		NodeList nodeList = doc.getDocumentElement().getChildNodes();
 		
-		Node node;
-		int l;
-		NamedNodeMap nodeMap;
-		do {
-    			do {
-    				int x = rand.nextInt(nodeList.getLength());
-        			node = nodeList.item(x);
-    			} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
-    			nodeMap = node.getAttributes();
-    			nodeMap.getNamedItem("file_url");
-    			imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
-        		l = imageUrl.length();
-        		imageUrl = imageUrl.substring(0, l-1);
-    		} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png"));
-    		
+		if (nodeList.getLength() == 0){
+			Node node;
+			int l;
+			NamedNodeMap nodeMap;
+			do {
+    				do {
+    					int x = rand.nextInt(nodeList.getLength());
+        				node = nodeList.item(x);
+    				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
+    				nodeMap = node.getAttributes();
+    				nodeMap.getNamedItem("file_url");
+    				imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
+        			l = imageUrl.length();
+        			imageUrl = imageUrl.substring(0, l-1);
+    			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png"));
 		
-		build.setImage(imageUrl);
+			build.setImage(imageUrl);
 		
-		if (!tag.equals("")) {
-			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
+			if (!tag.equals("")) {
+				m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
+			} else {
+				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
+			}
+			msgChannel.sendMessage(m).queue();
 		} else {
-			m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
+			Message error;
+			if (!tag.equals("")) {
+				error = new MessageBuilder().append("Aucun résultat avec les tags : " + tag).build();
+			} else {
+				error = new MessageBuilder().append("Aucun résultat sans tags (wtf?)").build();
+			}
+			msgChannel.sendMessage(error).queue();
 		}
-		msgChannel.sendMessage(m).queue();
     }
 }
