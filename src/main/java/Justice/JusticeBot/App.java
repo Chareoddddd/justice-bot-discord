@@ -222,6 +222,7 @@ public class App extends ListenerAdapter
 		String tag = "";
 		String imageUrl = "";
 		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100&tags=";
+		int count = 0;
 		
 		if (orders.length >= 2) {
 			tag = tag + orders[1];
@@ -247,7 +248,6 @@ public class App extends ListenerAdapter
 		
 		NodeList nodeList = doc.getDocumentElement().getChildNodes();
 		
-		Random rand = new Random();
 		Node node;
 		int l;
 		NamedNodeMap nodeMap;
@@ -255,13 +255,13 @@ public class App extends ListenerAdapter
     			do {
     				int x = rand.nextInt(100);
         			node = nodeList.item(x);
-        			nodeMap = node.getAttributes();
-        			nodeMap.getNamedItem("file_url");
     			} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
-			imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
+    			nodeMap = node.getAttributes();
+    			nodeMap.getNamedItem("file_url");
+    			imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
         		l = imageUrl.length();
         		imageUrl = imageUrl.substring(0, l-1);
-		} while (!imageUrl.substring(l-4).equals("jpeg") || !imageUrl.substring(l-3).equals("png"));
+    		} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png"));
     		
 		
 		build.setImage(imageUrl);
