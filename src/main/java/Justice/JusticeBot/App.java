@@ -248,15 +248,18 @@ public class App extends ListenerAdapter
 		NodeList nodeList = doc.getDocumentElement().getChildNodes();
 		
 		Random rand = new Random();
-		int x = rand.nextInt(100);
-		Node node = nodeList.item(x);
+		Node node;
+		do {
+    			int x = rand.nextInt(100);
+        		node = nodeList.item(x);
+    		} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
 		
 		NamedNodeMap nodeMap = node.getAttributes();
 		nodeMap.getNamedItem("file_url");
 		
 		imageUrl = nodeMap.getNamedItem("file_url").toString().substring(9);
 		
-		//build.setImage(imageUrl);
+		build.setImage(imageUrl);
 		
 		if (!tag.equals("")) {
 			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
