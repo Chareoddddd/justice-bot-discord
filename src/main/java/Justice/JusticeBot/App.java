@@ -250,11 +250,12 @@ public class App extends ListenerAdapter
 		Random rand = new Random();
 		Node node;
 		int l;
+		NamedNodeMap nodeMap;
 		do {
     			do {
     				int x = rand.nextInt(100);
         			node = nodeList.item(x);
-        			NamedNodeMap nodeMap = node.getAttributes();
+        			nodeMap = node.getAttributes();
         			nodeMap.getNamedItem("file_url");
     			} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
 			imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
