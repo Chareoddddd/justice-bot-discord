@@ -257,9 +257,11 @@ public class App extends ListenerAdapter
 		NamedNodeMap nodeMap = node.getAttributes();
 		nodeMap.getNamedItem("file_url");
 		
-		imageUrl = nodeMap.getNamedItem("file_url").toString().substring(9);
+		imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
+		int l = imageUrl.length();
+		imageUrl = imageUrl.substring(0, l-1);
 		
-		build.setImage("https://img.rule34.xxx/images/2967/6e1fa6f40a655575701d657a298d000ef42db32b.jpg");
+		build.setImage(imageUrl);
 		
 		if (!tag.equals("")) {
 			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
