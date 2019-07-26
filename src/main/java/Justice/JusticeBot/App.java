@@ -263,5 +263,6 @@ public class App extends ListenerAdapter
 		} else {
 			m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
 		}
+		msgChannel.sendMessage(m).queue();
     }
 }
