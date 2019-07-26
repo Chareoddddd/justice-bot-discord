@@ -166,7 +166,7 @@ public class App extends ListenerAdapter
 		build.setColor(0xfffd00);
 		build.setFooter("Poll de " + msgUser.getName(), msgUser.getAvatarUrl());
 		
-		String[] tmp = e.getMessage().getContentRaw().split("'", 0);
+		String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
 		int size = 0;
 
 		for (int i = 0; i < tmp.length; i++) {
