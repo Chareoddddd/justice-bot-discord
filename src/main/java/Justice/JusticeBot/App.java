@@ -256,7 +256,7 @@ public class App extends ListenerAdapter
 		
 		imageUrl = nodeMap.getNamedItem("file_url").toString().substring(9);
 		
-		build.setImage(imageUrl);
+		//build.setImage(imageUrl);
 		
 		if (!tag.equals("")) {
 			m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
