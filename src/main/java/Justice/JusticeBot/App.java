@@ -48,7 +48,7 @@ public class App extends ListenerAdapter
     {
     	JDA Bot = new JDABuilder(AccountType.BOT).setToken(System.getenv("BOT_TOKEN")).build();
         Bot.addEventListener(new App());
-        Bot.getPresence().setGame(Game.watching("ce serveur et le juge (Prefixe : " + prefix + ")"));
+        Bot.getPresence().setGame(Game.watching(prefix + "help"));
     }
     
     public void onMessageReceived(MessageReceivedEvent e) 
