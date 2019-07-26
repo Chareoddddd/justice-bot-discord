@@ -253,7 +253,7 @@ public class App extends ListenerAdapter
 		NamedNodeMap nodeMap;
 		do {
     			do {
-    				int x = rand.nextInt(100);
+    				int x = rand.nextInt(nodeList.getLength());
         			node = nodeList.item(x);
     			} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
     			nodeMap = node.getAttributes();
