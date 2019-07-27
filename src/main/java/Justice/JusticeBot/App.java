@@ -246,9 +246,11 @@ public class App extends ListenerAdapter
 		int count = Integer.parseInt(doc.getDocumentElement().getAttribute("count"))/100;
     		if (count > 2000) {
     			pid = rand.nextInt(2000);
-    		} else {
+    		} else if (count > 100) {
     			pid = rand.nextInt(count/100);
-    		}
+    		} else {
+			pid = 0;
+		}
     		
 		if (pid != 0){
 			uri = uri + "&pid=" + pid;
