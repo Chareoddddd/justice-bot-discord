@@ -62,9 +62,9 @@ public class App extends ListenerAdapter
 		
        		String msgString = msg.getContentRaw();
     		if (msgString.length() >= prefix.length() && msgString.substring(0, prefix.length()).equals(prefix)) {	//on a une commande
-    			msg.delete().queue();
     			String[] orders = msgString.substring(prefix.length()).split(" ", 0);
     			if (orders[0].equals("prefixe")) {
+				msg.delete().queue();
     				if (orders.length >= 2)
     					prefixe(orders[1], e, msgChannel);
     			} /*else if (orders[0].equals("punir") && e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
@@ -72,14 +72,19 @@ public class App extends ListenerAdapter
     			} else if (orders[0].equals("pardon") && e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
     				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
     			}*/ else if (orders[0].equals("poll") && orders.length >= 2 && orders.length <= 27) {
+				msg.delete().queue();
     				poll(e, msg, msgChannel, msgUser, mentionedMembers);
     			} else if (orders[0].equals("tirage") && orders.length >= 2) {
+				msg.delete().queue();
     				tirage(e, msg, msgChannel, msgUser);
     			} else if (orders[0].equals("rule34")) {
+				msg.delete().queue();
     				rule34(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals("konachan")) {
+				msg.delete().queue();
     				konachan(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals("help")) {
+				msg.delete().queue();
     				help(msgChannel);
     			} else {
     				msgChannel.sendMessage(msgUser.getAsMention() + ", commande inexistante").queue();
