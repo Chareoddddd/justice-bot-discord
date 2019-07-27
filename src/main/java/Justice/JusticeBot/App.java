@@ -243,28 +243,30 @@ public class App extends ListenerAdapter
     		doc.getDocumentElement().normalize();
     		
 		int pid = 0;
-    		if (Integer.parseInt(doc.getDocumentElement().getAttribute("count"))/100 > 2000) {
+		int count = Integer.parseInt(doc.getDocumentElement().getAttribute("count"))/100;
+    		if (count > 2000) {
     			pid = rand.nextInt(2000);
     		} else {
-    			pid = rand.nextInt(Integer.parseInt(doc.getDocumentElement().getAttribute("count"))/100);
+    			pid = rand.nextInt(count/100);
     		}
     		
-    		uri = uri + "&pid=" + pid;
-    		
-    		url = new URL(uri);
-    		httpConnection = (HttpURLConnection) url.openConnection();
+		if (pid != 0){
+			uri = uri + "&pid=" + pid;
 
-    		httpConnection.setRequestMethod("GET");
-    		httpConnection.setRequestProperty("Accept", "application/xml");
+			url = new URL(uri);
+			httpConnection = (HttpURLConnection) url.openConnection();
 
-    		xml = httpConnection.getInputStream();
+			httpConnection.setRequestMethod("GET");
+			httpConnection.setRequestProperty("Accept", "application/xml");
+
+			xml = httpConnection.getInputStream();
+
+			doc = db.parse(xml);
+			doc.getDocumentElement().normalize();
+		}
     		
-    		doc = db.parse(xml);
-    		doc.getDocumentElement().normalize();
-		
-    		NodeList nodeList = doc.getDocumentElement().getChildNodes();
-    		
-    		if (nodeList.getLength() > 0){
+    		if (count > 0 && nodeList.getLength() > 0){
+			NodeList nodeList = doc.getDocumentElement().getChildNodes();
     			Node node;
     			int l;
     			NamedNodeMap nodeMap;
