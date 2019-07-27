@@ -235,13 +235,13 @@ public class App extends ListenerAdapter
 			orders[r] = tmp[i];
 			r++;
 		}
-		if (i == 1) {
-			choix = choix + orders[i];
-		} else if (i > 1){
-			choix = choix + ", " + orders[i];
-		}
 	}
 	
+	choix = choix + orders[1];
+	for (int i = 2; i < size;  i++) {
+		choix = choix + ", " + orders[i];
+	}
+	 
 	String res;
 	if (orders.length == 2) {
 		res = orders[1];
