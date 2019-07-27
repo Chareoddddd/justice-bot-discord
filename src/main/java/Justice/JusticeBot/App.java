@@ -215,7 +215,7 @@ public class App extends ListenerAdapter
     public void tirage(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser) {
     	Message m;
     	EmbedBuilder build = new EmbedBuilder();
-	build.setColor(0xfc0cee);
+	build.setColor(0x4beea6);
 	build.setFooter("Tirage pour " + msgUser.getName(), msgUser.getAvatarUrl());
 	
 	String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
