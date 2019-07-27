@@ -229,6 +229,7 @@ public class App extends ListenerAdapter
     			uri = uri + "+" + orders[i];
     		}
     		
+		uri = uri.replaceAll("/", "%2f");
     		URL url = new URL(uri);
     		HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
 
