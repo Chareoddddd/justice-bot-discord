@@ -238,7 +238,7 @@ public class App extends ListenerAdapter
 	
 	String res = orders[rand.nextInt(size)];
 	
-	build.addTitle(res);
+	build.setTitle(res);
 	
 	m = new MessageBuilder().append("Le résultat du tirage est " + res).setEmbed(build.build()).build();
 	msgChannel.sendMessage(m).queue();
