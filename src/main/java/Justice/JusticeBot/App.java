@@ -242,7 +242,12 @@ public class App extends ListenerAdapter
     		Document doc = db.parse(xml);
     		doc.getDocumentElement().normalize();
     		
-		int pid = rand.nextInt(Integer.parseInt(doc.getDocumentElement().getAttribute("count"))/100);
+		int pid = 0;
+    		if (Integer.parseInt(doc.getDocumentElement().getAttribute("count"))/100 > 2000) {
+    			pid = rand.nextInt(2000);
+    		} else {
+    			pid = rand.nextInt(Integer.parseInt(doc.getDocumentElement().getAttribute("count"))/100);
+    		}
     		
     		uri = uri + "&pid=" + pid;
     		
