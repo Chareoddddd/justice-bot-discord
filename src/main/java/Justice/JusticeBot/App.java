@@ -43,6 +43,7 @@ public class App extends ListenerAdapter
 	static String prefix = "/";
 	String[] letters = {":regional_indicator_a:", ":regional_indicator_b:", ":regional_indicator_c:", ":regional_indicator_d:", ":regional_indicator_e:", ":regional_indicator_f:", ":regional_indicator_g:", ":regional_indicator_h:", ":regional_indicator_i:", ":regional_indicator_j:", ":regional_indicator_k:", ":regional_indicator_l:", ":regional_indicator_m:", ":regional_indicator_n:", ":regional_indicator_o:", ":regional_indicator_p:", ":regional_indicator_q:", ":regional_indicator_r:", ":regional_indicator_s:", ":regional_indicator_t:", ":regional_indicator_u:", ":regional_indicator_v:", ":regional_indicator_w:", ":regional_indicator_x:", ":regional_indicator_y:", ":regional_indicator_z:" };
 	String[] lettersUnicode = { "\uD83C\uDDE6", "\uD83C\uDDE7", "\uD83C\uDDE8", "\uD83C\uDDE9", "\uD83C\uDDEA", "\uD83C\uDDEB", "\uD83C\uDDEC", "\uD83C\uDDED", "\uD83C\uDDEE", "\uD83C\uDDEF", "\uD83C\uDDF0", "\uD83C\uDDF1", "\uD83C\uDDF2", "\uD83C\uDDF3", "\uD83C\uDDF4", "\uD83C\uDDF5", "\uD83C\uDDF6", "\uD83C\uDDF7", "\uD83C\uDDF8", "\uD83C\uDDF9", "\uD83C\uDDFA", "\uD83C\uDDFB", "\uD83C\uDDFC", "\uD83C\uDDFD", "\uD83C\uDDFE", "\uD83C\uDDFF" };
+	Random rand = new Random();
 	
     public static void main( String[] args ) throws LoginException, InterruptedException
     {
@@ -72,6 +73,8 @@ public class App extends ListenerAdapter
     				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
     			}*/ else if (orders[0].equals("poll") && orders.length >= 2 && orders.length <= 27) {
     				poll(e, msg, msgChannel, msgUser, mentionedMembers);
+    			} else if (orders[0].equals("tirage")) {
+    				tirage(e, msg, msgChannel, msgUser);
     			} else if (orders[0].equals("rule34")) {
     				rule34(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals("help")) {
@@ -95,6 +98,7 @@ public class App extends ListenerAdapter
 		/*build.addField(prefix + "punir", "Enlève la citoyenneté et met en Sous-Race (Administrateur requis)", false);
 		build.addField(prefix + "pardon", "Enlève Sous-Race et met la citoyenneté (Administrateur requis)", false);*/
 		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll", false);
+		build.addField(prefix + "tirage \"Proposition 1\" \"Proposition 2\" ...", "Effectue un tirage au sort parmi les propositions données", false);
 		build.addField(prefix + "rule34 tags", "Recherche une image sur rule34 en utilisant les tags fournis", false);
 		msgChannel.sendMessage(build.build()).queue();
 	}
@@ -208,6 +212,37 @@ public class App extends ListenerAdapter
 		}
 			
     }
+    public void tirage(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser) {
+    	Message m;
+    	EmbedBuilder build = new EmbedBuilder();
+	build.setColor(0xfc0cee);
+	build.setFooter("Tirage pour " + msgUser.getName(), msgUser.getAvatarUrl());
+	
+	String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
+	int size = 0;
+
+	for (int i = 0; i < tmp.length; i++) {
+		if (!tmp[i].equals(" ")) {
+			size++;
+		}
+	}
+		
+	int r = 0;
+	String[] orders = new String[size];
+	for (int i = 0; i < tmp.length; i++) {
+		if (!tmp[i].equals(" ")) {
+			orders[r] = tmp[i];
+			r++;
+		}
+	}
+	
+	String res = orders[rand.nextInt(size)];
+	
+	build.addTitle(res);
+	
+	m = new MessageBuilder().append("Le résultat du tirage est " + res).setEmbed(build.build()).build();
+	msgChannel.sendMessage(m).queue();
+    }
     
     public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
     	Message m;
@@ -218,7 +253,6 @@ public class App extends ListenerAdapter
     		String tag = "";
     		String imageUrl = "";
     		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100";
-    		Random rand = new Random();
     		
     		if (orders.length >= 2) {
     			tag = tag + orders[1];
