@@ -222,14 +222,13 @@ public class App extends ListenerAdapter
     		
     		if (orders.length >= 2) {
     			tag = tag + orders[1];
-    			uri = uri + orders[1];
+    			uri = uri + orders[1].replaceAll("/", "%2f");
     		}
     		for (int i = 2; i < orders.length; i++) {
     			tag = tag + ", " + orders[i];
-    			uri = uri + "+" + orders[i];
+    			uri = uri + "+" + orders[i].replaceAll("/", "%2f");
     		}
     		
-		uri = uri.replaceAll("/", "%2f");
     		URL url = new URL(uri);
     		HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
 
