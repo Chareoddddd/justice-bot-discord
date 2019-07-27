@@ -209,7 +209,7 @@ public class App extends ListenerAdapter
 			
     }
     
-    public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser) throws IOException, SAXException, ParserConfigurationException {
+    public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
     	Message m;
     	if (e.getTextChannel().isNSFW()) {
         	EmbedBuilder build = new EmbedBuilder();
