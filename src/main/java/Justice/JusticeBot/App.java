@@ -73,7 +73,7 @@ public class App extends ListenerAdapter
     				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
     			}*/ else if (orders[0].equals("poll") && orders.length >= 2 && orders.length <= 27) {
     				poll(e, msg, msgChannel, msgUser, mentionedMembers);
-    			} else if (orders[0].equals("tirage")) {
+    			} else if (orders[0].equals("tirage") && orders.length >= 2) {
     				tirage(e, msg, msgChannel, msgUser);
     			} else if (orders[0].equals("rule34")) {
     				rule34(e, msg, msgChannel, msgUser, orders);
@@ -236,7 +236,11 @@ public class App extends ListenerAdapter
 		}
 	}
 	
-	String res = orders[rand.nextInt(size)];
+	if (orders.length == 2) {
+		String res = orders[1];
+	} else {
+		String res = orders[rand.nextInt(size - 1) + 1];
+	}
 	
 	build.setTitle(res);
 	
