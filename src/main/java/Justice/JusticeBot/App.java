@@ -77,6 +77,8 @@ public class App extends ListenerAdapter
     				tirage(e, msg, msgChannel, msgUser);
     			} else if (orders[0].equals("rule34")) {
     				rule34(e, msg, msgChannel, msgUser, orders);
+    			} else if (orders[0].equals("konachan")) {
+    				konachan(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals("help")) {
     				help(msgChannel);
     			} else {
@@ -100,6 +102,7 @@ public class App extends ListenerAdapter
 		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll", false);
 		build.addField(prefix + "tirage \"Proposition 1\" \"Proposition 2\" ...", "Effectue un tirage au sort parmi les propositions données", false);
 		build.addField(prefix + "rule34 tags", "Recherche une image sur rule34 en utilisant les tags fournis", false);
+		build.addField(prefix + "konachan tags", "Recherche une image sur konachan en utilisant les tags fournis", false);
 		msgChannel.sendMessage(build.build()).queue();
 	}
     
@@ -259,6 +262,7 @@ public class App extends ListenerAdapter
     	Message m;
     	if (e.getTextChannel().isNSFW()) {
         	EmbedBuilder build = new EmbedBuilder();
+		build.setTitle("Trouvé sur rule34.xxx", "https://rule34.xxx/");
     		build.setColor(0xfc0cee);
     		build.setFooter("Demandé par " + msgUser.getName(), msgUser.getAvatarUrl());
     		String tag = "";
@@ -289,7 +293,7 @@ public class App extends ListenerAdapter
     		
 		int pid = 0;
 		int count = Integer.parseInt(doc.getDocumentElement().getAttribute("count"));
-    		if (count > 2000) {
+    		if (count > 200000) {
     			pid = rand.nextInt(2000);
     		} else if (count > 100) {
     			pid = rand.nextInt(count/100);
@@ -327,7 +331,7 @@ public class App extends ListenerAdapter
         				imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
             			l = imageUrl.length();
             			imageUrl = imageUrl.substring(0, l-1);
-        			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png"));
+        			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg"));
     		
     			build.setImage(imageUrl);
     		
@@ -350,5 +354,98 @@ public class App extends ListenerAdapter
     		m = new MessageBuilder().append(msgUser.getAsMention() + ", ce n'est pas un canal NSFW").build();
 		msgChannel.sendMessage(m).queue();
     	}
+    }
+    
+    public void konachan(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
+		Message m;
+        	EmbedBuilder build = new EmbedBuilder();
+		build.setTitle("Trouvé sur Konachan.net", "http://konachan.net/");
+    		build.setColor(0x956294);
+    		build.setFooter("Demandé par " + msgUser.getName(), msgUser.getAvatarUrl());
+    		String tag = "";
+    		String imageUrl = "";
+    		String uri = "http://konachan.net/post.xml?limit=100";
+    		
+    		if (orders.length >= 2) {
+    			tag = tag + orders[1];
+    			uri = uri + "&tags=" + orders[1];
+    		}
+    		for (int i = 2; i < orders.length; i++) {
+    			tag = tag + ", " + orders[i];
+    			uri = uri + "+" + orders[i];
+    		}
+    		
+    		URL url = new URL(uri);
+    		HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
+
+    		httpConnection.setRequestMethod("GET");
+    		httpConnection.setRequestProperty("Accept", "application/xml");
+
+    		InputStream xml = httpConnection.getInputStream();
+    		
+    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    		DocumentBuilder db = dbf.newDocumentBuilder();
+    		Document doc = db.parse(xml);
+    		doc.getDocumentElement().normalize();
+    		
+		int page = 1;
+		int count = Integer.parseInt(doc.getDocumentElement().getAttribute("count"));
+    		if (count > 200000) {
+    			page = rand.nextInt(1999) + 1;
+    		} else if (count > 100) {
+    			page = rand.nextInt(count/100) + 1;
+    		} else {
+			page = 1;
+		}
+    		
+		if (page > 1){
+			uri = uri + "&page=" + page;
+
+			url = new URL(uri);
+			httpConnection = (HttpURLConnection) url.openConnection();
+
+			httpConnection.setRequestMethod("GET");
+			httpConnection.setRequestProperty("Accept", "application/xml");
+
+			xml = httpConnection.getInputStream();
+
+			doc = db.parse(xml);
+			doc.getDocumentElement().normalize();
+		}
+    		
+		NodeList nodeList = doc.getDocumentElement().getChildNodes();
+    		if (count > 0 && nodeList.getLength() > 0){
+    			Node node;
+    			int l;
+    			NamedNodeMap nodeMap;
+    			do {
+        				do {
+        					int x = rand.nextInt(nodeList.getLength());
+            				node = nodeList.item(x);
+        				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
+        				nodeMap = node.getAttributes();
+        				nodeMap.getNamedItem("file_url");
+        				imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
+            			l = imageUrl.length();
+            			imageUrl = imageUrl.substring(0, l-1);
+        			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg"));
+    		
+    			build.setImage(imageUrl);
+    		
+    			if (!tag.equals("")) {
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
+    			} else {
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
+    			}
+    			msgChannel.sendMessage(m).queue();
+    		} else {
+    			Message error;
+    			if (!tag.equals("")) {
+    				error = new MessageBuilder().append("Aucun résultat avec les tags : " + tag).build();
+    			} else {
+    				error = new MessageBuilder().append("Aucun résultat sans tags (wtf?)").build();
+    			}
+    			msgChannel.sendMessage(error).queue();
+    		}
     }
 }
