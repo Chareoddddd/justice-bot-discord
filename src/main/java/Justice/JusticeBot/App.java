@@ -242,6 +242,21 @@ public class App extends ListenerAdapter
     		Document doc = db.parse(xml);
     		doc.getDocumentElement().normalize();
     		
+		int pid = rand.nextInt(Integer.parseInt(doc.getDocumentElement().getAttribute("count"))/100);
+    		
+    		uri = uri + "&pid=" + pid;
+    		
+    		url = new URL(uri);
+    		httpConnection = (HttpURLConnection) url.openConnection();
+
+    		httpConnection.setRequestMethod("GET");
+    		httpConnection.setRequestProperty("Accept", "application/xml");
+
+    		xml = httpConnection.getInputStream();
+    		
+    		doc = db.parse(xml);
+    		doc.getDocumentElement().normalize();
+		
     		NodeList nodeList = doc.getDocumentElement().getChildNodes();
     		
     		if (nodeList.getLength() > 0){
