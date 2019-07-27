@@ -209,7 +209,7 @@ public class App extends ListenerAdapter
 			
     }
     
-    public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
+    public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser) throws IOException, SAXException, ParserConfigurationException {
     	Message m;
     	if (e.getTextChannel().isNSFW()) {
         	EmbedBuilder build = new EmbedBuilder();
@@ -219,6 +219,24 @@ public class App extends ListenerAdapter
     		String imageUrl = "";
     		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100&tags=";
     		Random rand = new Random();
+		
+		String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
+		int size = 0;
+
+		for (int i = 0; i < tmp.length; i++) {
+			if (!tmp[i].equals(" ")) {
+				size++;
+			}
+		}
+		
+		int r = 0;
+		String[] orders = new String[size];
+		for (int i = 0; i < tmp.length; i++) {
+			if (!tmp[i].equals(" ")) {
+				orders[r] = tmp[i];
+				r++;
+			}
+		}
     		
     		if (orders.length >= 2) {
     			tag = tag + orders[1];
