@@ -288,7 +288,7 @@ public class App extends ListenerAdapter
     		doc.getDocumentElement().normalize();
     		
 		int pid = 0;
-		int count = Integer.parseInt(doc.getDocumentElement().getAttribute("count"))/100;
+		int count = Integer.parseInt(doc.getDocumentElement().getAttribute("count"));
     		if (count > 2000) {
     			pid = rand.nextInt(2000);
     		} else if (count > 100) {
