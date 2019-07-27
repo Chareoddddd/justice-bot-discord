@@ -86,9 +86,7 @@ public class App extends ListenerAdapter
     			} else if (orders[0].equals("help")) {
 				msg.delete().queue();
     				help(msgChannel);
-    			} else {
-    				msgChannel.sendMessage(msgUser.getAsMention() + ", commande inexistante").queue();
-    			}
+    			} 
     		}
     	} catch (Exception ex) {
  
