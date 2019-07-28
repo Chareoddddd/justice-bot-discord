@@ -223,24 +223,6 @@ public class App extends ListenerAdapter
 	build.setFooter("Tirage pour " + msgUser.getName(), msgUser.getAvatarUrl());
 	String choix = "";
 	
-	String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
-	int size = 0;
-
-	for (int i = 0; i < tmp.length; i++) {
-		if (!tmp[i].equals(" ")) {
-			size++;
-		}
-	}
-		
-	int r = 0;
-	String[] orders = new String[size];
-	for (int i = 0; i < tmp.length; i++) {
-		if (!tmp[i].equals(" ")) {
-			orders[r] = tmp[i];
-			r++;
-		}
-	}
-	
 	choix = choix + orders[1];
 	for (int i = 2; i < size;  i++) {
 		choix = choix + ", " + orders[i];
@@ -270,24 +252,6 @@ public class App extends ListenerAdapter
     		String imageUrl = "";
     		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100";
     		
-		String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
-		int size = 0;
-
-		for (int i = 0; i < tmp.length; i++) {
-			if (!tmp[i].equals(" ")) {
-				size++;
-			}
-		}
-		
-		int r = 0;
-		String[] orders = new String[size];
-		for (int i = 0; i < tmp.length; i++) {
-			if (!tmp[i].equals(" ")) {
-				orders[r] = tmp[i];
-				r++;
-			}
-		}
-		
     		if (orders.length >= 2) {
     			tag = tag + orders[1];
     			uri = uri + "&tags=" + orders[1].replaceAll("/", "%2f").replace(" ", "_");;
@@ -386,24 +350,6 @@ public class App extends ListenerAdapter
     		String uri = "http://zerochan.net/";
 		int page = 1;
 		
-		String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
-		int size = 0;
-
-		for (int i = 0; i < tmp.length; i++) {
-			if (!tmp[i].equals(" ")) {
-				size++;
-			}
-		}
-		
-		int r = 0;
-		String[] orders = new String[size];
-		for (int i = 0; i < tmp.length; i++) {
-			if (!tmp[i].equals(" ")) {
-				orders[r] = tmp[i];
-				r++;
-			}
-		}
-    		
     		if (orders.length == 2) {
     			tag = tag + orders[1];
     			uri = uri + orders[1].replace(" ", "+");;
