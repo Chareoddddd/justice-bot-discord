@@ -79,10 +79,10 @@ public class App extends ListenerAdapter
     				tirage(e, msg, msgChannel, msgUser);
     			} else if (orders[0].equals("rule34")) {
 				msg.delete().queue();
-    				rule34(e, msg, msgChannel, msgUser, orders);
-    			} else if (orders[0].equals("konachan")) {
+    				rule34(e, msg, msgChannel, msgUser);
+    			} else if (orders[0].equals("zerochan") && orders.length <= 2) {
 				msg.delete().queue();
-    				konachan(e, msg, msgChannel, msgUser, orders);
+    				zerochan(e, msg, msgChannel, msgUser);
     			} else if (orders[0].equals("help")) {
 				msg.delete().queue();
     				help(msgChannel);
@@ -104,8 +104,8 @@ public class App extends ListenerAdapter
 		build.addField(prefix + "pardon", "Enlève Sous-Race et met la citoyenneté (Administrateur requis)", false);*/
 		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll", false);
 		build.addField(prefix + "tirage \"Proposition 1\" \"Proposition 2\" ...", "Effectue un tirage au sort parmi les propositions données", false);
-		build.addField(prefix + "rule34 tags", "Recherche une image sur rule34 en utilisant les tags fournis", false);
-		build.addField(prefix + "konachan tags", "Recherche une image sur konachan en utilisant les tags fournis", false);
+		build.addField(prefix + "rule34 \"tags\"", "Recherche une image sur rule34 en utilisant les tags fournis", false);
+		build.addField(prefix + "zerochan \"tag\"", "Recherche une image sur konachan en utilisant le tag fournis (attention, un seul tag supporté", false);
 		msgChannel.sendMessage(build.build()).queue();
 	}
     
@@ -261,7 +261,7 @@ public class App extends ListenerAdapter
 	msgChannel.sendMessage(m).queue();
     }
     
-    public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
+    public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser) throws IOException, SAXException, ParserConfigurationException {
     	Message m;
     	if (e.getTextChannel().isNSFW()) {
         	EmbedBuilder build = new EmbedBuilder();
@@ -272,13 +272,31 @@ public class App extends ListenerAdapter
     		String imageUrl = "";
     		String uri = "https://rule34.xxx/?page=dapi&s=post&q=index&limit=100";
     		
+		String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
+		int size = 0;
+
+		for (int i = 0; i < tmp.length; i++) {
+			if (!tmp[i].equals(" ")) {
+				size++;
+			}
+		}
+		
+		int r = 0;
+		String[] orders = new String[size];
+		for (int i = 0; i < tmp.length; i++) {
+			if (!tmp[i].equals(" ")) {
+				orders[r] = tmp[i];
+				r++;
+			}
+		}
+		
     		if (orders.length >= 2) {
     			tag = tag + orders[1];
-    			uri = uri + "&tags=" + orders[1].replaceAll("/", "%2f");
+    			uri = uri + "&tags=" + orders[1].replaceAll("/", "%2f").replace(" ", "_");;
     		}
     		for (int i = 2; i < orders.length; i++) {
     			tag = tag + ", " + orders[i];
-    			uri = uri + "+" + orders[i].replaceAll("/", "%2f");
+    			uri = uri + "+" + orders[i].replaceAll("/", "%2f").replace(" ", "_");;
     		}
     		
     		URL url = new URL(uri);
@@ -359,30 +377,52 @@ public class App extends ListenerAdapter
     	}
     }
     
-    public void konachan(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
+    public void zerochan(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser) throws IOException, SAXException, ParserConfigurationException {
 		Message m;
         	EmbedBuilder build = new EmbedBuilder();
-		build.setTitle("Trouvé sur Konachan.net", "http://konachan.net/");
+		build.setTitle("Trouvé sur Zerochan.net", "http://zerochan.net/");
     		build.setColor(0x956294);
     		build.setFooter("Demandé par " + msgUser.getName(), msgUser.getAvatarUrl());
     		String tag = "";
     		String imageUrl = "";
-    		String uri = "http://konachan.net/post.xml?limit=100";
+    		String uri = "http://zerochan.net/";
+		int page = 1;
+		
+		String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
+		int size = 0;
+
+		for (int i = 0; i < tmp.length; i++) {
+			if (!tmp[i].equals(" ")) {
+				size++;
+			}
+		}
+		
+		int r = 0;
+		String[] orders = new String[size];
+		for (int i = 0; i < tmp.length; i++) {
+			if (!tmp[i].equals(" ")) {
+				orders[r] = tmp[i];
+				r++;
+			}
+		}
     		
-    		if (orders.length >= 2) {
+    		if (orders.length == 2) {
     			tag = tag + orders[1];
-    			uri = uri + "&tags=" + orders[1];
+    			uri = uri + orders[1].replace(" ", "+");;
     		}
-    		for (int i = 2; i < orders.length; i++) {
-    			tag = tag + ", " + orders[i];
-    			uri = uri + "+" + orders[i];
-    		}
+		
+		uri = uri + "?xml";
+		
+		if (orders.length == 1) {
+			page = rand.nextInt(1000) + 1;
+			uri = uri + "&p=" + page;
+		} 
     		
     		URL url = new URL(uri);
     		HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
 
     		httpConnection.setRequestMethod("GET");
-    		httpConnection.setRequestProperty("Accept", "application/xml");
+    		httpConnection.setRequestProperty("Accept", "application/rss+xml");
 
     		InputStream xml = httpConnection.getInputStream();
     		
@@ -391,62 +431,72 @@ public class App extends ListenerAdapter
     		Document doc = db.parse(xml);
     		doc.getDocumentElement().normalize();
     		
-		int page = 1;
-		int count = Integer.parseInt(doc.getDocumentElement().getAttribute("count"));
-    		if (count > 200000) {
-    			page = rand.nextInt(1999) + 1;
-    		} else if (count > 100) {
-    			page = rand.nextInt(count/100) + 1;
-    		} else {
+		int count = 1;
+		if (orders.length > 1) {
+			String desc = doc.getDocumentElement().getChildNodes().item(1).getChildNodes().item(7).getTextContent();
+			String[] descTab = desc.substring(13).split(" ");
+			String[] nbImageTab = descTab[0].split(",");
+			String nbImageStr = "";
+			for (int i = 0; i < nbImageTab.length; i++) {
+				nbImageStr = nbImageStr + nbImageTab[i];
+			}
+			
+			count = Integer.parseInt(nbImageStr) ;
+			if (count > 100000) {
+				page = rand.nextInt(1000) + 1;
+			} else if (count > 100) {
+				page = rand.nextInt(count/100) + 1;
+			} else {
 			page = 1;
+			}
 		}
-    		
-		if (page > 1){
-			uri = uri + "&page=" + page;
-
+		
+		
+		if ((orders.length > 1) && (page > 1)){
+			uri = uri + "&p=" + page;
+	
 			url = new URL(uri);
 			httpConnection = (HttpURLConnection) url.openConnection();
-
+	
 			httpConnection.setRequestMethod("GET");
-			httpConnection.setRequestProperty("Accept", "application/xml");
-
+			httpConnection.setRequestProperty("Accept", "application/rss+xml");
+	
 			xml = httpConnection.getInputStream();
-
+	
 			doc = db.parse(xml);
 			doc.getDocumentElement().normalize();
+			
 		}
     		
 		NodeList nodeList = doc.getDocumentElement().getChildNodes();
     		if (count > 0 && nodeList.getLength() > 0){
-    			Node node;
-    			int l;
-    			NamedNodeMap nodeMap;
-    			do {
-        				do {
-        					int x = rand.nextInt(nodeList.getLength());
-            				node = nodeList.item(x);
-        				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
-        				nodeMap = node.getAttributes();
-        				nodeMap.getNamedItem("file_url");
-        				imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
-            			l = imageUrl.length();
-            			imageUrl = imageUrl.substring(0, l-1);
-        			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg"));
-    		
+    			Node node, content;
+			int l;
+			do {
+    				do {
+    					int x = 2*rand.nextInt(nodeList.getLength()/2) + 1;
+        				node = nodeList.item(x);
+    				} while (!node.getNodeName().equals("item"));
+    				content = node.getChildNodes().item(13);
+    				imageUrl = content.getAttributes().getNamedItem("url").toString().substring(5);
+        			l = imageUrl.length();
+        			imageUrl = imageUrl.substring(0, l-1);
+    			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg"));
+		
     			build.setImage(imageUrl);
     		
     			if (!tag.equals("")) {
-    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec le tag : " + tag).setEmbed(build.build()).build();
     			} else {
-    				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tag").setEmbed(build.build()).build();
     			}
     			msgChannel.sendMessage(m).queue();
     		} else {
     			Message error;
     			if (!tag.equals("")) {
-    				error = new MessageBuilder().append("Aucun résultat avec les tags : " + tag).build();
+    				error = new MessageBuilder().append("Aucun résultat avec le tag : " + tag).build();
     			} else {
-    				error = new MessageBuilder().append("Aucun résultat sans tags (wtf?)").build();
+    				error = new MessageBuilder().append("Aucun résultat sans tag (wtf?)").build();
     			}
     			msgChannel.sendMessage(error).queue();
     		}
