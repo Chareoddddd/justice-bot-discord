@@ -62,7 +62,23 @@ public class App extends ListenerAdapter
 		
        		String msgString = msg.getContentRaw();
     		if (msgString.length() >= prefix.length() && msgString.substring(0, prefix.length()).equals(prefix)) {	//on a une commande
-    			String[] orders = msgString.substring(prefix.length()).split(" ", 0);
+			String[] tmp = msgString.split(Character.toString('"'), 0);
+			int size = 0;
+
+			for (int i = 0; i < tmp.length; i++) {
+				if (!tmp[i].equals(" ")) {
+					size++;
+				}
+			}
+
+			int r = 0;
+			String[] orders = new String[size];
+			for (int i = 0; i < tmp.length; i++) {
+				if (!tmp[i].equals(" ")) {
+					orders[r] = tmp[i];
+					r++;
+				}
+			}
     			if (orders[0].equals("prefixe")) {
 				msg.delete().queue();
     				if (orders.length >= 2)
@@ -73,16 +89,16 @@ public class App extends ListenerAdapter
     				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
     			}*/ else if (orders[0].equals("poll") && orders.length >= 2 && orders.length <= 27) {
 				msg.delete().queue();
-    				poll(e, msg, msgChannel, msgUser, mentionedMembers);
+    				poll(e, msg, msgChannel, msgUser, mentionedMembers, orders);
     			} else if (orders[0].equals("tirage") && orders.length >= 2) {
 				msg.delete().queue();
-    				tirage(e, msg, msgChannel, msgUser);
+    				tirage(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals("rule34")) {
 				msg.delete().queue();
-    				rule34(e, msg, msgChannel, msgUser);
+    				rule34(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals("zerochan") && orders.length <= 2) {
 				msg.delete().queue();
-    				zerochan(e, msg, msgChannel, msgUser);
+    				zerochan(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals("help")) {
 				msg.delete().queue();
     				help(msgChannel);
@@ -99,7 +115,7 @@ public class App extends ListenerAdapter
 		build.setColor(0xaa51e2);
 		
 		build.setTitle("**Liste des Commandes**");
-		build.addField(prefix + "prefixe", "Modifie le préfixe", false);
+		build.addField(prefix + "\"prefixe\"", "Modifie le préfixe", false);
 		/*build.addField(prefix + "punir", "Enlève la citoyenneté et met en Sous-Race (Administrateur requis)", false);
 		build.addField(prefix + "pardon", "Enlève Sous-Race et met la citoyenneté (Administrateur requis)", false);*/
 		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll", false);
@@ -170,29 +186,11 @@ public class App extends ListenerAdapter
 		msgChannel.sendMessage(build.build()).queue();
     }*/
     
-    public void poll (MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers) {
+    public void poll (MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers, String[] orders) {
     	
     	EmbedBuilder build = new EmbedBuilder();
 		build.setColor(0xfffd00);
 		build.setFooter("Poll de " + msgUser.getName(), msgUser.getAvatarUrl());
-		
-		String[] tmp = e.getMessage().getContentRaw().split(Character.toString('"'), 0);
-		int size = 0;
-
-		for (int i = 0; i < tmp.length; i++) {
-			if (!tmp[i].equals(" ")) {
-				size++;
-			}
-		}
-		
-		int r = 0;
-		String[] orders = new String[size];
-		for (int i = 0; i < tmp.length; i++) {
-			if (!tmp[i].equals(" ")) {
-				orders[r] = tmp[i];
-				r++;
-			}
-		}
 		
 		String mes = "";
 		if (orders.length > 2) {
@@ -218,7 +216,7 @@ public class App extends ListenerAdapter
 		}
 			
     }
-    public void tirage(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser) {
+    public void tirage(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) {
     	Message m;
     	EmbedBuilder build = new EmbedBuilder();
 	build.setColor(0x4beea6);
@@ -261,7 +259,7 @@ public class App extends ListenerAdapter
 	msgChannel.sendMessage(m).queue();
     }
     
-    public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser) throws IOException, SAXException, ParserConfigurationException {
+    public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
     	Message m;
     	if (e.getTextChannel().isNSFW()) {
         	EmbedBuilder build = new EmbedBuilder();
@@ -377,7 +375,7 @@ public class App extends ListenerAdapter
     	}
     }
     
-    public void zerochan(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser) throws IOException, SAXException, ParserConfigurationException {
+    public void zerochan(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
 		Message m;
         	EmbedBuilder build = new EmbedBuilder();
 		build.setTitle("Trouvé sur Zerochan.net", "http://zerochan.net/");
