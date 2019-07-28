@@ -99,7 +99,7 @@ public class App extends ListenerAdapter
     			} else if (orders[0].equals(prefix + "zerochan ") && orders.length <= 2) {
 				msg.delete().queue();
     				zerochan(e, msg, msgChannel, msgUser, orders);
-    			} else if (orders[0].equals(prefix + "help ")) {
+    			} else if (orders[0].equals(prefix + "help")) {
 				msg.delete().queue();
     				help(msgChannel);
     			} else {
