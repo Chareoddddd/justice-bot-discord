@@ -87,24 +87,23 @@ public class App extends ListenerAdapter
     				punir(e, msg, msgChannel, msgUser, mentionedMembers);
     			} else if (orders[0].equals("pardon") && e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
     				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
-    			}*/ else if (orders[0].equals("poll") && orders.length >= 2 && orders.length <= 27) {
+    			}*/ else if (orders[0].equals(prefix + "poll ") && orders.length >= 2 && orders.length <= 27) {
 				msg.delete().queue();
     				poll(e, msg, msgChannel, msgUser, mentionedMembers, orders);
-    			} else if (orders[0].equals("tirage") && orders.length >= 2) {
+    			} else if (orders[0].equals(prefix + "tirage ") && orders.length >= 2) {
 				msg.delete().queue();
     				tirage(e, msg, msgChannel, msgUser, orders);
-    			} else if (orders[0].equals("rule34")) {
+    			} else if (orders[0].equals(prefix + "rule34 ")) {
 				msg.delete().queue();
     				rule34(e, msg, msgChannel, msgUser, orders);
-    			} else if (orders[0].equals("zerochan") && orders.length <= 2) {
+    			} else if (orders[0].equals(prefix + "zerochan ") && orders.length <= 2) {
 				msg.delete().queue();
     				zerochan(e, msg, msgChannel, msgUser, orders);
-    			} else if (orders[0].equals("help")) {
+    			} else if (orders[0].equals(prefix + "help ")) {
 				msg.delete().queue();
     				help(msgChannel);
     			} else {
-				Message m = new MessageBuilder().append("Rien").build();
-    				msgChannel.sendMessage(m).queue();
+				
 			}
     		}
     	} catch (Exception ex) {
