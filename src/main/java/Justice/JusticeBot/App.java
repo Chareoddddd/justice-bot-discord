@@ -224,7 +224,7 @@ public class App extends ListenerAdapter
 	String choix = "";
 	
 	choix = choix + orders[1];
-	for (int i = 2; i < size;  i++) {
+	for (int i = 2; i < orders.length;  i++) {
 		choix = choix + ", " + orders[i];
 	}
 	 
@@ -232,7 +232,7 @@ public class App extends ListenerAdapter
 	if (orders.length == 2) {
 		res = orders[1];
 	} else {
-		res = orders[rand.nextInt(size - 1) + 1];
+		res = orders[rand.nextInt(orders.length - 1) + 1];
 	}
 	
 	build.setTitle("**" + res + "**");
