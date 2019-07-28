@@ -102,7 +102,10 @@ public class App extends ListenerAdapter
     			} else if (orders[0].equals("help")) {
 				msg.delete().queue();
     				help(msgChannel);
-    			} 
+    			} else {
+				m = new MessageBuilder().append("Rien").build();
+    				msgChannel.sendMessage(m).queue();
+			}
     		}
     	} catch (Exception ex) {
  
