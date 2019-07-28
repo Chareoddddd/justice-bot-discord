@@ -96,7 +96,7 @@ public class App extends ListenerAdapter
     			} else if ((orders[0].equals(prefix + "rule34 ")) || (orders[0].equals(prefix + "rule34"))) {
 				msg.delete().queue();
     				rule34(e, msg, msgChannel, msgUser, orders);
-    			} else if (((orders[0].equals("/zerochan ") || (orders[0].equals("/zerochan")) && orders.length <= 2)) {
+    			} else if ((orders[0].equals("/zerochan ") || orders[0].equals("/zerochan")) && orders.length <= 2) {
 				msg.delete().queue();
     				zerochan(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals("/help")) {
