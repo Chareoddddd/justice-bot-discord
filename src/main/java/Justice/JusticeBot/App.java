@@ -393,7 +393,7 @@ public class App extends ListenerAdapter
 			} else if (count > 100) {
 				page = rand.nextInt(count/100) + 1;
 			} else {
-			page = 1;
+				page = 1;
 			}
 		}
 		
@@ -411,7 +411,6 @@ public class App extends ListenerAdapter
 	
 			doc = db.parse(xml);
 			doc.getDocumentElement().normalize();
-			
 		}
     		
 		NodeList nodeList = doc.getDocumentElement().getChildNodes();
@@ -429,6 +428,9 @@ public class App extends ListenerAdapter
         			imageUrl = imageUrl.substring(0, l-1);
     			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg"));
 		
+			Message tmpMes = new MessageBuilder().append(imageUrl).build();
+			msgChannel.sendMessage(tmpMes).queue();
+			
     			build.setImage(imageUrl);
     		
     			if (!tag.equals("")) {
