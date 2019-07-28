@@ -103,7 +103,7 @@ public class App extends ListenerAdapter
 				msg.delete().queue();
     				help(msgChannel);
     			} else {
-				m = new MessageBuilder().append("Rien").build();
+				Message m = new MessageBuilder().append("Rien").build();
     				msgChannel.sendMessage(m).queue();
 			}
     		}
