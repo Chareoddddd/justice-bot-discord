@@ -83,11 +83,11 @@ public class App extends ListenerAdapter
 				msg.delete().queue();
     				if (orders.length >= 2)
     					prefixe(orders[1], e, msgChannel);
-    			} /*else if (orders[0].equals("punir") && e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+    			} else if (orders[0].equals("punir")) {
     				punir(e, msg, msgChannel, msgUser, mentionedMembers);
-    			} else if (orders[0].equals("pardon") && e.getMember().hasPermission(Permission.ADMINISTRATOR)) {
+    			} else if (orders[0].equals("pardon")) {
     				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
-    			}*/ else if (orders[0].equals(prefix + "poll ") && orders.length >= 2 && orders.length <= 27) {
+    			} else if (orders[0].equals(prefix + "poll ") && orders.length >= 2 && orders.length <= 27) {
 				msg.delete().queue();
     				poll(e, msg, msgChannel, msgUser, mentionedMembers, orders);
     			} else if (orders[0].equals(prefix + "tirage ") && orders.length >= 2) {
@@ -140,7 +140,7 @@ public class App extends ListenerAdapter
 		msgChannel.sendMessage(build.build()).queue();
     }
     
-    /*public void punir(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers) {
+    public void punir(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers) {
     	EmbedBuilder build = new EmbedBuilder();
 		
     	String names = "";
@@ -152,7 +152,7 @@ public class App extends ListenerAdapter
 			} else {
 				names = names + ", " + currentMember.getAsMention();
 			}
-			e.getGuild().getController().modifyMemberRoles(currentMember, e.getGuild().getRolesByName("non", true), e.getGuild().getRolesByName("oui", true)).queue();
+			e.getGuild().getController().modifyMemberRoles(currentMember, e.getGuild().getRolesByName("Liberté", true), e.getGuild().getRolesByName("Citoyen", true)).queue();
 		}
 	
 		build.setColor(0xff4600);
@@ -176,7 +176,7 @@ public class App extends ListenerAdapter
 			} else {
 				names = names + ", " + currentMember.getAsMention();
 			}
-			e.getGuild().getController().modifyMemberRoles(currentMember, e.getGuild().getRolesByName("Citoyen", false), e.getGuild().getRolesByName("Sous-Race", false)).queue();
+			e.getGuild().getController().modifyMemberRoles(currentMember, e.getGuild().getRolesByName("Citoyen", false), e.getGuild().getRolesByName("Liberté", false)).queue();
 		}
 	
 		build.setColor(0x53ff00);
@@ -186,7 +186,7 @@ public class App extends ListenerAdapter
 			build.setDescription(names + " a(ont) été deban.");
 		}
 		msgChannel.sendMessage(build.build()).queue();
-    }*/
+    }
     
     public void poll (MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers, String[] orders) {
     	
