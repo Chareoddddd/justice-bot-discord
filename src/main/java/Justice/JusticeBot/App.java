@@ -114,12 +114,9 @@ public class App extends ListenerAdapter
 		
 		build.setTitle("**Liste des Commandes**");
 		build.addField(prefix + "prefixe \"nouveau\"", "Modifie le préfixe", false);
-		/*build.addField(prefix + "punir", "Enlève la citoyenneté et met en Sous-Race (Administrateur requis)", false);
-		build.addField(prefix + "pardon", "Enlève Sous-Race et met la citoyenneté (Administrateur requis)", false);*/
 		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll", false);
 		build.addField(prefix + "tirage \"Proposition 1\" \"Proposition 2\" ...", "Effectue un tirage au sort parmi les propositions données", false);
 		build.addField(prefix + "rule34 \"tags\"", "Recherche une image sur rule34 en utilisant les tags fournis", false);
-		build.addField(prefix + "zerochan \"tag\"", "Recherche une image sur konachan en utilisant le tag fournis (attention, un seul tag supporté", false);
 		msgChannel.sendMessage(build.build()).queue();
 	}
     
@@ -147,7 +144,7 @@ public class App extends ListenerAdapter
 		String mes = "";
 		if (orders.length > 2) {
 			for (int i = 2; i < orders.length; i++) {
-				mes = mes + letters[i-2] + orders[i] + System.getProperty("line.separator");
+				mes = mes + letters[i-2] + " " + orders[i] + System.getProperty("line.separator");
 			}
 			build.addField("**" + orders[1] + "**", mes, false);
 			Message m = new MessageBuilder().append("Un nouveau poll a été lancé!").setEmbed(build.build()).build();
