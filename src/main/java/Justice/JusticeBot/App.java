@@ -79,13 +79,13 @@ public class App extends ListenerAdapter
 					r++;
 				}
 			}
-    			if (orders[0].equals("prefixe")) {
+    			if (orders[0].equals(prefix + "prefixe")) {
 				msg.delete().queue();
     				if (orders.length >= 2)
     					prefixe(orders[1], e, msgChannel);
-    			} else if (orders[0].equals("punir")) {
+    			} else if (orders[0].equals(prefix + "punir")) {
     				punir(e, msg, msgChannel, msgUser, mentionedMembers);
-    			} else if (orders[0].equals("pardon")) {
+    			} else if (orders[0].equals(prefix + "pardon")) {
     				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
     			} else if (orders[0].equals(prefix + "poll ") && orders.length >= 2 && orders.length <= 27) {
 				msg.delete().queue();
@@ -96,10 +96,10 @@ public class App extends ListenerAdapter
     			} else if ((orders[0].equals(prefix + "rule34 ")) || (orders[0].equals(prefix + "rule34"))) {
 				msg.delete().queue();
     				rule34(e, msg, msgChannel, msgUser, orders);
-    			} else if ((orders[0].equals("/zerochan ") || orders[0].equals("/zerochan")) && orders.length <= 2) {
+    			} else if ((orders[0].equals(prefix + "zerochan ") || orders[0].equals(prefix + "zerochan")) && orders.length <= 2) {
 				msg.delete().queue();
     				zerochan(e, msg, msgChannel, msgUser, orders);
-    			} else if (orders[0].equals("/help")) {
+    			} else if (orders[0].equals(prefix + "help")) {
 				msg.delete().queue();
     				help(msgChannel);
     			} else {
