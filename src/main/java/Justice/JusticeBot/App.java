@@ -83,9 +83,9 @@ public class App extends ListenerAdapter
 				msg.delete().queue();
     				if (orders.length >= 2)
     					prefixe(orders[1], e, msgChannel);
-    			} else if (orders[0].equals(prefix + "punir")) {
+    			} else if (orders[0].equals(prefix + "punir ")) {
     				punir(e, msg, msgChannel, msgUser, mentionedMembers);
-    			} else if (orders[0].equals(prefix + "pardon")) {
+    			} else if (orders[0].equals(prefix + "pardon ")) {
     				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
     			} else if (orders[0].equals(prefix + "poll ") && orders.length >= 2 && orders.length <= 27) {
 				msg.delete().queue();
