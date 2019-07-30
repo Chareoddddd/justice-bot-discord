@@ -83,11 +83,7 @@ public class App extends ListenerAdapter
 				msg.delete().queue();
     				if (orders.length >= 2)
     					prefixe(orders[1], e, msgChannel);
-    			} /*else if (orders[0].equals(prefix + "punir ")) {
-    				punir(e, msg, msgChannel, msgUser, mentionedMembers);
-    			} else if (orders[0].equals(prefix + "pardon ")) {
-    				pardon(e, msg, msgChannel, msgUser, mentionedMembers);
-    			}*/ else if (orders[0].equals(prefix + "poll ") && orders.length >= 2 && orders.length <= 27) {
+    			} else if (orders[0].equals(prefix + "poll ") && orders.length >= 2 && orders.length <= 27) {
 				msg.delete().queue();
     				poll(e, msg, msgChannel, msgUser, mentionedMembers, orders);
     			} else if (orders[0].equals(prefix + "tirage ") && orders.length >= 2) {
@@ -140,53 +136,7 @@ public class App extends ListenerAdapter
 		msgChannel.sendMessage(build.build()).queue();
     }
     
-    /*public void punir(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers) {
-    	EmbedBuilder build = new EmbedBuilder();
-		
-    	String names = "";
-		Iterator<Member> iter = mentionedMembers.iterator();
-		while (iter.hasNext()) {
-			Member currentMember = iter.next();
-			if (names.contentEquals("")) {
-				names = names + currentMember.getAsMention();
-			} else {
-				names = names + ", " + currentMember.getAsMention();
-			}
-			e.getGuild().getController().modifyMemberRoles(currentMember, e.getGuild().getRolesByName("Liberté", true), e.getGuild().getRolesByName("Citoyen", true)).queue();
-		}
-	
-		build.setColor(0xff4600);
-		if (mentionedMembers.size() == 0) {
-			build.setDescription("Personne n'a été ban");
-		} else {
-			build.setDescription(names + " a(ont) été ban.");
-		}
-		msgChannel.sendMessage(build.build()).queue();
-    }
     
-    public void pardon(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers) {
-    	EmbedBuilder build = new EmbedBuilder();
-    	
-    	String names = "";
-		Iterator<Member> iter = mentionedMembers.iterator();
-		while (iter.hasNext()) {
-			Member currentMember = iter.next();
-			if (names.contentEquals("")) {
-				names = names + currentMember.getAsMention();
-			} else {
-				names = names + ", " + currentMember.getAsMention();
-			}
-			e.getGuild().getController().modifyMemberRoles(currentMember, e.getGuild().getRolesByName("Citoyen", false), e.getGuild().getRolesByName("Liberté", false)).queue();
-		}
-	
-		build.setColor(0x53ff00);
-		if (mentionedMembers.size() == 0) {
-			build.setDescription("Personne n'a été deban");
-		} else {
-			build.setDescription(names + " a(ont) été deban.");
-		}
-		msgChannel.sendMessage(build.build()).queue();
-    }*/
     
     public void poll (MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, List<Member> mentionedMembers, String[] orders) {
     	
@@ -218,6 +168,9 @@ public class App extends ListenerAdapter
 		}
 			
     }
+    
+    
+    
     public void tirage(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) {
     	Message m;
     	EmbedBuilder build = new EmbedBuilder();
@@ -242,6 +195,8 @@ public class App extends ListenerAdapter
 	m = new MessageBuilder().append("Le résultat du tirage entre " + "**" + choix + "**" + " est ...").setEmbed(build.build()).build();
 	msgChannel.sendMessage(m).queue();
     }
+    
+    
     
     public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
     	Message m;
@@ -340,6 +295,8 @@ public class App extends ListenerAdapter
 		msgChannel.sendMessage(m).queue();
     	}
     }
+    
+    
     
     public void zerochan(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
 		Message m;
@@ -448,5 +405,5 @@ public class App extends ListenerAdapter
     			}
     			msgChannel.sendMessage(error).queue();
     		}
-    }
+    	}
 }
