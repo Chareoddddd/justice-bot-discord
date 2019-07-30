@@ -79,7 +79,7 @@ public class App extends ListenerAdapter
 					r++;
 				}
 			}
-    			if (orders[0].equals(prefix + "prefixe")) {
+    			if (orders[0].equals(prefix + "prefixe ")) {
 				msg.delete().queue();
     				if (orders.length >= 2)
     					prefixe(orders[1], e, msgChannel);
