@@ -114,7 +114,7 @@ public class App extends ListenerAdapter
 		
 		build.setTitle("**Liste des Commandes**");
 		build.addField(prefix + "prefixe \"nouveau\"", "Modifie le préfixe", false);
-		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll", false);
+		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll avec ou sans réponses données", false);
 		build.addField(prefix + "tirage \"Proposition 1\" \"Proposition 2\" ...", "Effectue un tirage au sort parmi les propositions données", false);
 		build.addField(prefix + "rule34 \"tags\"", "Recherche une image sur rule34 en utilisant les tags fournis (Canal NSFW seulement)", false);
 		msgChannel.sendMessage(build.build()).queue();
