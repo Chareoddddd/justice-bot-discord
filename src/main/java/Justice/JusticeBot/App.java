@@ -72,20 +72,22 @@ public class App extends ListenerAdapter
 				orders[r] = tmp[i];
 				r++;
 			}
-    			if (orders[0].equals(prefix + "prefixe ")) {
+			orders[0] = orders[0].replaceAll(" ", "");
+			
+    			if (orders[0].equals(prefix + "prefixe")) {
 				msg.delete().queue();
     				if (orders.length >= 2)
     					prefixe(orders[1], e, msgChannel);
-    			} else if (orders[0].equals(prefix + "poll ") && orders.length >= 2 && orders.length <= 27) {
+    			} else if (orders[0].equals(prefix + "poll") && orders.length >= 2 && orders.length <= 27) {
 				msg.delete().queue();
     				poll(e, msg, msgChannel, msgUser, mentionedMembers, orders);
-    			} else if (orders[0].equals(prefix + "tirage ") && orders.length >= 2) {
+    			} else if (orders[0].equals(prefix + "tirage") && orders.length >= 2) {
 				msg.delete().queue();
     				tirage(e, msg, msgChannel, msgUser, orders);
-    			} else if ((orders[0].equals(prefix + "rule34 ")) || (orders[0].equals(prefix + "rule34"))) {
+    			} else if (orders[0].equals(prefix + "rule34")) {
 				msg.delete().queue();
     				rule34(e, msg, msgChannel, msgUser, orders);
-    			} else if ((orders[0].equals(prefix + "zerochan ") || orders[0].equals(prefix + "zerochan")) && orders.length <= 2) {
+    			} else if (orders[0].equals(prefix + "zerochan") && orders.length <= 2) {
 				msg.delete().queue();
     				zerochan(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals(prefix + "help")) {
