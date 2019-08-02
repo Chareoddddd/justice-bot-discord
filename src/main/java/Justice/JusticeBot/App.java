@@ -63,7 +63,7 @@ public class App extends ListenerAdapter
        		String msgString = msg.getContentRaw();
     		if (msgString.length() >= prefix.length() && msgString.substring(0, prefix.length()).equals(prefix)) {	//on a une commande
 			String[] tmp = msgString.split(Character.toString('"'), 0);
-			int size = tmp.length/2;
+			int size = tmp.length / 2 + 1;
 
 			int r = 1;
 			String[] orders = new String[size];
