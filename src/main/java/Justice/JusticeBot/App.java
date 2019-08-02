@@ -67,6 +67,7 @@ public class App extends ListenerAdapter
 
 			int r = 0;
 			String[] orders = new String[size];
+			orders[0] = tmp[0];
 			for (int i = 1; i < tmp.length; i+=2) {
 				orders[r] = tmp[i];
 				r++;
