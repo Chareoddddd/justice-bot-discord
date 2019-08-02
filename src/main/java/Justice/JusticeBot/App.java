@@ -65,7 +65,7 @@ public class App extends ListenerAdapter
 			String[] tmp = msgString.split(Character.toString('"'), 0);
 			int size = tmp.length/2;
 
-			int r = 0;
+			int r = 1;
 			String[] orders = new String[size];
 			orders[0] = tmp[0];
 			for (int i = 1; i < tmp.length; i+=2) {
