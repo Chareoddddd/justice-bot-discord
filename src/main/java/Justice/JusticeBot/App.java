@@ -63,21 +63,13 @@ public class App extends ListenerAdapter
        		String msgString = msg.getContentRaw();
     		if (msgString.length() >= prefix.length() && msgString.substring(0, prefix.length()).equals(prefix)) {	//on a une commande
 			String[] tmp = msgString.split(Character.toString('"'), 0);
-			int size = 0;
-
-			for (int i = 0; i < tmp.length; i++) {
-				if (!tmp[i].equals(" ")) {
-					size++;
-				}
-			}
+			int size = tmp.length/2;
 
 			int r = 0;
 			String[] orders = new String[size];
-			for (int i = 0; i < tmp.length; i++) {
-				if (!tmp[i].equals(" ")) {
-					orders[r] = tmp[i];
-					r++;
-				}
+			for (int i = 1; i < tmp.length; i+=2) {
+				orders[r] = tmp[i];
+				r++;
 			}
     			if (orders[0].equals(prefix + "prefixe ")) {
 				msg.delete().queue();
