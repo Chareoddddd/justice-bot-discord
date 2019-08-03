@@ -282,10 +282,7 @@ public class App extends ListenerAdapter
     			}
     			msgChannel.sendMessage(error).queue();
     		}
-    	} else {
-    		m = new MessageBuilder().append(msgUser.getAsMention() + ", ce n'est pas un canal NSFW").build();
-		msgChannel.sendMessage(m).queue();
-    	}
+    	} 
     }
     
     
