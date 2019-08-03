@@ -30,7 +30,12 @@
       <groupId>net.dv8tion</groupId>
       <artifactId>JDA</artifactId>
       <version>3.8.3_464</version>
-	</dependency>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20180130</version>
+    </dependency>
   </dependencies>
   
   <repositories>
