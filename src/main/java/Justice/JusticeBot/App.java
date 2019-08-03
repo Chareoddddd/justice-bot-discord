@@ -41,6 +41,8 @@ import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import com.google.common.io.CharStreams;
 
+import org.json.*;
+
 public class App extends ListenerAdapter
 {
 	static String prefix = "/";
@@ -362,7 +364,7 @@ public class App extends ListenerAdapter
 			} else {
     				x = rand.nextInt(jsonObject.getJSONArray("wallpapers").length());
 			}
-			String imageUrl = jsonObject.getJSONArray("wallpapers").getJSONObject(x).getString("url_image");
+			imageUrl = jsonObject.getJSONArray("wallpapers").getJSONObject(x).getString("url_image");
 		
 			Message tmpMes = new MessageBuilder().append(imageUrl).build();
 			msgChannel.sendMessage(tmpMes).queue();
