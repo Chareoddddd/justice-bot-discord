@@ -329,7 +329,7 @@ public class App extends ListenerAdapter
     		
 		int count = 1;
 		if (orders.length > 1) {
-			count = jsonObject.getString("total_match");
+			count = Integer.parseInt(jsonObject.getString("total_match"));
 			if (count > 3000) {
 				page = rand.nextInt(100) + 1;
 			} else if (count > 30) {
