@@ -2,6 +2,8 @@ package Justice.JusticeBot;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -37,6 +39,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.HierarchyException;
 import net.dv8tion.jda.core.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import com.google.common.io.CharStreams;
 
 public class App extends ListenerAdapter
 {
@@ -87,9 +90,9 @@ public class App extends ListenerAdapter
     			} else if (orders[0].equals(prefix + "rule34")) {
 				msg.delete().queue();
     				rule34(e, msg, msgChannel, msgUser, orders);
-    			} else if (orders[0].equals(prefix + "zerochan") && orders.length <= 2) {
+    			} else if (orders[0].equals(prefix + "wp")) {
 				msg.delete().queue();
-    				zerochan(e, msg, msgChannel, msgUser, orders);
+    				wp(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals(prefix + "help")) {
 				msg.delete().queue();
     				help(msgChannel);
@@ -112,6 +115,7 @@ public class App extends ListenerAdapter
 		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll avec ou sans réponses données", false);
 		build.addField(prefix + "tirage \"Proposition 1\" \"Proposition 2\" ...", "Effectue un tirage au sort parmi les propositions données", false);
 		build.addField(prefix + "rule34 \"tags\"", "Recherche une image sur rule34 en utilisant les tags fournis (Canal NSFW seulement)", false);
+		build.addField(prefix + "wp \"tags\"", "Recherche une image sur Wallpaper Abyss en utilisant les tags fournis", false);
 		msgChannel.sendMessage(build.build()).queue();
 	}
     
@@ -287,57 +291,48 @@ public class App extends ListenerAdapter
     
     
     
-    public void zerochan(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
+    public void wp(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
 		Message m;
         	EmbedBuilder build = new EmbedBuilder();
-		build.setTitle("Trouvé sur Zerochan.net", "http://zerochan.net/");
+		build.setTitle("Trouvé sur Wallpaper Abyss", "https://wall.alphacoders.com/");
     		build.setColor(0x956294);
     		build.setFooter("Demandé par " + msgUser.getName(), msgUser.getAvatarUrl());
     		String tag = "";
     		String imageUrl = "";
-    		String uri = "http://zerochan.net/";
+    		String uri = "https://wall.alphacoders.com/api2.0/get.php?auth=" + System.getenv("IMAGE_TOKEN");
 		int page = 1;
 		
-    		if (orders.length == 2) {
-    			tag = tag + orders[1];
-    			uri = uri + orders[1].replace(" ", "+");;
-    		}
-		
-		uri = uri + "?xml";
-		
 		if (orders.length == 1) {
-			page = rand.nextInt(1000) + 1;
-			uri = uri + "&p=" + page;
+			uri = uri + "&method=random&count=1";
 		} 
+		
+    		if (orders.length >= 2) {
+    			tag = tag + orders[1];
+    			uri = uri + "&method=search&term=" + orders[1].replace(" ", "+");
+			for (int i = 2; i < orders.length; i++) {
+				tag = tag + ", " + orders[i];
+    				uri = uri + "+" + orders[i].replace(" ", "+");
+			}
+    		}
     		
     		URL url = new URL(uri);
     		HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
 
     		httpConnection.setRequestMethod("GET");
-    		httpConnection.setRequestProperty("Accept", "application/rss+xml");
+    		httpConnection.setRequestProperty("Accept", "application/json");
 
-    		InputStream xml = httpConnection.getInputStream();
-    		
-    		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-    		DocumentBuilder db = dbf.newDocumentBuilder();
-    		Document doc = db.parse(xml);
-    		doc.getDocumentElement().normalize();
+    		InputStream response = httpConnection.getInputStream();
+		Reader reader = new InputStreamReader(response);
+		String json = CharStreams.toString(reader);
+		JSONObject jsonObject = new JSONObject(json);
     		
 		int count = 1;
 		if (orders.length > 1) {
-			String desc = doc.getDocumentElement().getChildNodes().item(1).getChildNodes().item(7).getTextContent();
-			String[] descTab = desc.substring(13).split(" ");
-			String[] nbImageTab = descTab[0].split(",");
-			String nbImageStr = "";
-			for (int i = 0; i < nbImageTab.length; i++) {
-				nbImageStr = nbImageStr + nbImageTab[i];
-			}
-			
-			count = Integer.parseInt(nbImageStr) ;
-			if (count > 100000) {
-				page = rand.nextInt(1000) + 1;
-			} else if (count > 100) {
-				page = rand.nextInt(count/100) + 1;
+			count = jsonObject.getString("total_match");
+			if (count > 3000) {
+				page = rand.nextInt(100) + 1;
+			} else if (count > 30) {
+				page = rand.nextInt(count/30) + 1;
 			} else {
 				page = 1;
 			}
@@ -345,34 +340,29 @@ public class App extends ListenerAdapter
 		
 		
 		if ((orders.length > 1) && (page > 1)){
-			uri = uri + "&p=" + page;
+			uri = uri + "&page=" + page;
 	
 			url = new URL(uri);
 			httpConnection = (HttpURLConnection) url.openConnection();
 	
 			httpConnection.setRequestMethod("GET");
-			httpConnection.setRequestProperty("Accept", "application/rss+xml");
+			httpConnection.setRequestProperty("Accept", "application/json");
 	
-			xml = httpConnection.getInputStream();
-	
-			doc = db.parse(xml);
-			doc.getDocumentElement().normalize();
+			response = httpConnection.getInputStream();
+			reader = new InputStreamReader(response);
+			json = CharStreams.toString(reader);
+			jsonObject = new JSONObject(json);
 		}
     		
-		NodeList nodeList = doc.getDocumentElement().getChildNodes();
-    		if (count > 0 && nodeList.getLength() > 0){
-    			Node node, content;
-			int l;
-			do {
-    				do {
-    					int x = 2*rand.nextInt(nodeList.getLength()/2) + 1;
-        				node = nodeList.item(x);
-    				} while (!node.getNodeName().equals("item"));
-    				content = node.getChildNodes().item(13);
-    				imageUrl = content.getAttributes().getNamedItem("url").toString().substring(5);
-        			l = imageUrl.length();
-        			imageUrl = imageUrl.substring(0, l-1);
-    			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg"));
+		
+    		if (count > 0){
+			int x;
+			if (orders.length == 1) {
+				x = 0;
+			} else {
+    				x = rand.nextInt(jsonObject.getJSONArray("wallpapers").length());
+			}
+			String imageUrl = jsonObject.getJSONArray("wallpapers").getJSONObject(x).getString("url_image")
 		
 			Message tmpMes = new MessageBuilder().append(imageUrl).build();
 			msgChannel.sendMessage(tmpMes).queue();
@@ -380,17 +370,17 @@ public class App extends ListenerAdapter
     			build.setImage(imageUrl);
     		
     			if (!tag.equals("")) {
-    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec le tag : " + tag).setEmbed(build.build()).build();
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec le tags : " + tag).setEmbed(build.build()).build();
     			} else {
-    				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tag").setEmbed(build.build()).build();
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
     			}
     			msgChannel.sendMessage(m).queue();
     		} else {
     			Message error;
     			if (!tag.equals("")) {
-    				error = new MessageBuilder().append("Aucun résultat avec le tag : " + tag).build();
+    				error = new MessageBuilder().append("Aucun résultat avec les tags : " + tag).build();
     			} else {
-    				error = new MessageBuilder().append("Aucun résultat sans tag (wtf?)").build();
+    				error = new MessageBuilder().append("Aucun résultat sans tags (wtf?)").build();
     			}
     			msgChannel.sendMessage(error).queue();
     		}
