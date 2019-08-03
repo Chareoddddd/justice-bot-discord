@@ -362,7 +362,7 @@ public class App extends ListenerAdapter
 			} else {
     				x = rand.nextInt(jsonObject.getJSONArray("wallpapers").length());
 			}
-			String imageUrl = jsonObject.getJSONArray("wallpapers").getJSONObject(x).getString("url_image")
+			String imageUrl = jsonObject.getJSONArray("wallpapers").getJSONObject(x).getString("url_image");
 		
 			Message tmpMes = new MessageBuilder().append(imageUrl).build();
 			msgChannel.sendMessage(tmpMes).queue();
