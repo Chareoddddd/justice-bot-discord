@@ -283,7 +283,7 @@ public class App extends ListenerAdapter
     			build.setImage(imageUrl);
     
     			if (!tag.equals("")) {
-    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags **" + tag + "**").setEmbed(build.build()).build();
     			} else {
     				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
     			}
@@ -291,7 +291,7 @@ public class App extends ListenerAdapter
     		} else {
     			Message error;
     			if (!tag.equals("")) {
-    				error = new MessageBuilder().append("Aucun résultat avec les tags : " + tag).build();
+    				error = new MessageBuilder().append("Aucun résultat avec les tags **" + tag + "**").build();
     			} else {
     				error = new MessageBuilder().append("Aucun résultat sans tags (wtf?)").build();
     			}
@@ -378,7 +378,7 @@ public class App extends ListenerAdapter
     			build.setImage(imageUrl);
     		
     			if (!tag.equals("")) {
-    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec le tags : " + tag).setEmbed(build.build()).build();
+    				m = new MessageBuilder().append("Voici les résultats de ma recherche avec le tags **" + tag + "**").setEmbed(build.build()).build();
     			} else {
     				m = new MessageBuilder().append("Voici les résultats de ma recherche sans tags").setEmbed(build.build()).build();
     			}
@@ -386,7 +386,7 @@ public class App extends ListenerAdapter
     		} else {
     			Message error;
     			if (!tag.equals("")) {
-    				error = new MessageBuilder().append("Aucun résultat avec les tags : " + tag).build();
+    				error = new MessageBuilder().append("Aucun résultat avec les tags **" + tag + "**").build();
     			} else {
     				error = new MessageBuilder().append("Aucun résultat sans tags (wtf?)").build();
     			}
