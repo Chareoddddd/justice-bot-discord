@@ -257,21 +257,28 @@ public class App extends ListenerAdapter
     		if (count > 0 && nodeList.getLength() > 0){
     			Node node;
     			int l;
+			int safe = 0;
     			NamedNodeMap nodeMap;
     			do {
         				do {
         					int x = rand.nextInt(nodeList.getLength());
-            				node = nodeList.item(x);
-        				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl);
+						safe++;
+            					node = nodeList.item(x);
+        				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl && safe < 20);
+					if (safe >= 20) {
+						break;
+					}
         				nodeMap = node.getAttributes();
         				nodeMap.getNamedItem("file_url");
         				imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
-            			l = imageUrl.length();
-            			imageUrl = imageUrl.substring(0, l-1);
-        			} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg"));
+            				l = imageUrl.length();
+            				imageUrl = imageUrl.substring(0, l-1);
+        		} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg")  && (safe < 20));
     		
     			build.setImage(imageUrl);
-    		
+    			if (safe >= 20) {
+						break;
+			}
     			if (!tag.equals("")) {
     				m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
     			} else {
@@ -287,6 +294,12 @@ public class App extends ListenerAdapter
     			}
     			msgChannel.sendMessage(error).queue();
     		}
+		
+		if (safe >= 20) {
+			Message timeout;
+    			timeout = new MessageBuilder().append("Timeout").build();
+    			msgChannel.sendMessage(timeout).queue();
+		}
     	} 
     }
     
