@@ -280,9 +280,7 @@ public class App extends ListenerAdapter
         		} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg")  && (safe < 20));
     		
     			build.setImage(imageUrl);
-    			if (safe >= 20) {
-						break;
-			}
+    
     			if (!tag.equals("")) {
     				m = new MessageBuilder().append("Voici les résultats de ma recherche avec les tags : " + tag).setEmbed(build.build()).build();
     			} else {
