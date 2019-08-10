@@ -197,6 +197,7 @@ public class App extends ListenerAdapter
     
     public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
     	Message m;
+	int safe = 0;
     	if (e.getTextChannel().isNSFW()) {
         	EmbedBuilder build = new EmbedBuilder();
 		build.setTitle("Trouvé sur rule34.xxx", "https://rule34.xxx/");
@@ -257,7 +258,7 @@ public class App extends ListenerAdapter
     		if (count > 0 && nodeList.getLength() > 0){
     			Node node;
     			int l;
-			int safe = 0;
+			safe = 0;
     			NamedNodeMap nodeMap;
     			do {
         				do {
