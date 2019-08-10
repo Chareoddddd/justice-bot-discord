@@ -198,6 +198,7 @@ public class App extends ListenerAdapter
     public void rule34(MessageReceivedEvent e, Message msg, MessageChannel msgChannel, User msgUser, String[] orders) throws IOException, SAXException, ParserConfigurationException {
     	Message m;
 	int safe = 0;
+	int timeout_limit = 100;
     	if (e.getTextChannel().isNSFW()) {
         	EmbedBuilder build = new EmbedBuilder();
 		build.setTitle("Trouvé sur rule34.xxx", "https://rule34.xxx/");
@@ -265,8 +266,8 @@ public class App extends ListenerAdapter
         					int x = rand.nextInt(nodeList.getLength());
 						safe++;
             					node = nodeList.item(x);
-        				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl && safe < 20);
-					if (safe >= 20) {
+        				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl && safe < timeout_limit);
+					if (safe >= timeout_limit) {
 						Message timeout;
     						timeout = new MessageBuilder().append("Timeout").build();
     						msgChannel.sendMessage(timeout).queue();
@@ -277,7 +278,7 @@ public class App extends ListenerAdapter
         				imageUrl = nodeMap.getNamedItem("file_url").toString().substring(10);
             				l = imageUrl.length();
             				imageUrl = imageUrl.substring(0, l-1);
-        		} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg")  && (safe < 20));
+        		} while (!imageUrl.substring(l-5).equals("jpeg") && !imageUrl.substring(l-4).equals("png") && !imageUrl.substring(l-4).equals("jpg")  && (safe < timeout_limit));
     		
     			build.setImage(imageUrl);
     
