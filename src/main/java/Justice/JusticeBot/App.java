@@ -267,7 +267,10 @@ public class App extends ListenerAdapter
             					node = nodeList.item(x);
         				} while (node instanceof com.sun.org.apache.xerces.internal.dom.DeferredTextImpl && safe < 20);
 					if (safe >= 20) {
-						break;
+						Message timeout;
+    						timeout = new MessageBuilder().append("Timeout").build();
+    						msgChannel.sendMessage(timeout).queue();
+						return;
 					}
         				nodeMap = node.getAttributes();
         				nodeMap.getNamedItem("file_url");
@@ -295,12 +298,6 @@ public class App extends ListenerAdapter
     			}
     			msgChannel.sendMessage(error).queue();
     		}
-		
-		if (safe >= 20) {
-			Message timeout;
-    			timeout = new MessageBuilder().append("Timeout").build();
-    			msgChannel.sendMessage(timeout).queue();
-		}
     	} 
     }
     
