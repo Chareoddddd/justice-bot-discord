@@ -115,8 +115,8 @@ public class App extends ListenerAdapter
 		build.addField(prefix + "prefixe \"nouveau\"", "Modifie le préfixe", false);
 		build.addField(prefix + "poll \"Question\" \"Réponse 1\" \"Réponse 2\" ...", "Effectue un poll avec ou sans réponses données", false);
 		build.addField(prefix + "tirage \"Proposition 1\" \"Proposition 2\" ...", "Effectue un tirage au sort parmi les propositions données", false);
-		build.addField(prefix + "rule34 \"tags\"", "Recherche une image sur rule34 en utilisant les tags fournis (Canal NSFW seulement)", false);
-		build.addField(prefix + "wp \"tags\"", "Recherche une image sur Wallpaper Abyss en utilisant les tags fournis", false);
+		build.addField(prefix + "rule34 \"tag 1\" \"tag 2\" ...", "Recherche une image sur rule34 en utilisant les tags fournis (Canal NSFW seulement)", false);
+		build.addField(prefix + "wp \"tag 1\" \"tag 2\" ...", "Recherche une image sur Wallpaper Abyss en utilisant les tags fournis", false);
 		msgChannel.sendMessage(build.build()).queue();
 	}
     
