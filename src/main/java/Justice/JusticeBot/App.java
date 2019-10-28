@@ -66,15 +66,19 @@ public class App extends ListenerAdapter
 		
        		String msgString = msg.getContentRaw();
     		if (msgString.length() >= prefix.length() && msgString.substring(0, prefix.length()).equals(prefix)) {	//on a une commande
-			String[] tmp = msgString.split(Character.toString('"'), 0);
-			int size = tmp.length / 2 + 1;
-
-			int r = 1;
-			String[] orders = new String[size];
-			orders[0] = tmp[0];
-			for (int i = 1; i < tmp.length; i+=2) {
-				orders[r] = tmp[i];
-				r++;
+			String[] orders;
+			if (msgString.contains('"')) {
+				String[] tmp = msgString.split(Character.toString('"'), 0);
+				int size = tmp.length / 2 + 1;
+				int r = 1;
+				orders = new String[size];
+				orders[0] = tmp[0];
+				for (int i = 1; i < tmp.length; i+=2) {
+					orders[r] = tmp[i];
+					r++;
+				}
+			} else {
+				orders = msgString.split(" ", 0);
 			}
 			orders[0] = orders[0].replaceAll(" ", "");
 			
