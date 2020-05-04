@@ -176,6 +176,7 @@ public class App extends ListenerAdapter
 	build.setColor(0x4beea6);
 	build.setFooter("Tirage pour " + msgUser.getName(), msgUser.getAvatarUrl());
 	String res;
+	String buildMessage;
 	
 	if (orders.length >= 2) {
 		String choix = "";
@@ -190,13 +191,15 @@ public class App extends ListenerAdapter
 		} else {
 			res = orders[rand.nextInt(orders.length - 1) + 1];
 		}
-		m = new MessageBuilder().append("Le résultat du tirage entre " + "**" + choix + "**" + " est ...").setEmbed(build.build()).build();
+		buildMessage = "Le résultat du tirage entre " + "**" + choix + "**" + " est ...";
 	} else {
 		res = orders[rand.nextInt(1) + 1];
-		m = new MessageBuilder().append("Alors, pile ou face ?").setEmbed(build.build()).build();
+		
+		buildMessage = "Alors, pile ou face ?";
 	}
 	
 	build.setTitle("**" + res + "**");
+	m = new MessageBuilder().append(buildMessage).setEmbed(build.build()).build();
 	
 	msgChannel.sendMessage(m).queue();
     }
