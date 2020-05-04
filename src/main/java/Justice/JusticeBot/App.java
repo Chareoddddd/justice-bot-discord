@@ -193,7 +193,7 @@ public class App extends ListenerAdapter
 		}
 		buildMessage = "Le résultat du tirage entre " + "**" + choix + "**" + " est ...";
 	} else {
-		if (rand.nextInt(1) == 0){
+		if (rand.nextInt(2) == 0){
 			res = "pile";
 		} else {
 			res = "face";
