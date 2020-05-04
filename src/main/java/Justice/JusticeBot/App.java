@@ -59,13 +59,13 @@ public class App extends ListenerAdapter
     public void onMessageReceived(MessageReceivedEvent e) 
     {
     	try {
-    		Message msg = e.getMessage();
-		MessageChannel msgChannel = e.getChannel();
-		User msgUser = e.getAuthor();
-		List<Member> mentionedMembers = msg.getMentionedMembers();
-		
        		String msgString = msg.getContentRaw();
     		if (msgString.length() >= prefix.length() && msgString.substring(0, prefix.length()).equals(prefix)) {	//on a une commande
+			Message msg = e.getMessage();
+			MessageChannel msgChannel = e.getChannel();
+			User msgUser = e.getAuthor();
+			List<Member> mentionedMembers = msg.getMentionedMembers();
+			
 			String[] orders;
 			if (msgString.contains(Character.toString('"'))) {
 				String[] tmp = msgString.split(Character.toString('"'), 0);
@@ -106,7 +106,7 @@ public class App extends ListenerAdapter
 			}
     		}
     	} catch (Exception ex) {
- 
+	
     	}
     }
     
