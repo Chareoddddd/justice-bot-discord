@@ -195,7 +195,7 @@ public class App extends ListenerAdapter
 	} else {
 		if (rand.nextInt(1) == 0){
 			res = "pile";
-		else {
+		} else {
 			res = "face";
 		}
 		
