@@ -89,7 +89,7 @@ public class App extends ListenerAdapter
     			} else if (orders[0].equals(prefix + "poll") && orders.length >= 2 && orders.length <= 27) {
 				msg.delete().queue();
     				poll(e, msg, msgChannel, msgUser, mentionedMembers, orders);
-    			} else if (orders[0].equals(prefix + "tirage") && orders.length >= 2) {
+    			} else if (orders[0].equals(prefix + "tirage")) {
 				msg.delete().queue();
     				tirage(e, msg, msgChannel, msgUser, orders);
     			} else if (orders[0].equals(prefix + "rule34")) {
@@ -101,9 +101,7 @@ public class App extends ListenerAdapter
     			} else if (orders[0].equals(prefix + "help")) {
 				msg.delete().queue();
     				help(msgChannel);
-    			} else {
-				
-			}
+    			} 
     		}
     	} catch (Exception ex) {
 	
@@ -177,23 +175,29 @@ public class App extends ListenerAdapter
     	EmbedBuilder build = new EmbedBuilder();
 	build.setColor(0x4beea6);
 	build.setFooter("Tirage pour " + msgUser.getName(), msgUser.getAvatarUrl());
-	String choix = "";
-	
-	choix = choix + orders[1];
-	for (int i = 2; i < orders.length;  i++) {
-		choix = choix + ", " + orders[i];
-	}
-	 
 	String res;
-	if (orders.length == 2) {
-		res = orders[1];
+	
+	if (orders.length >= 2) {
+		String choix = "";
+
+		choix = choix + orders[1];
+		for (int i = 2; i < orders.length;  i++) {
+			choix = choix + ", " + orders[i];
+		}
+
+		if (orders.length == 2) {
+			res = orders[1];
+		} else {
+			res = orders[rand.nextInt(orders.length - 1) + 1];
+		}
+		m = new MessageBuilder().append("Le résultat du tirage entre " + "**" + choix + "**" + " est ...").setEmbed(build.build()).build();
 	} else {
-		res = orders[rand.nextInt(orders.length - 1) + 1];
+		res = orders[rand.nextInt(1) + 1];
+		m = new MessageBuilder().append("Alors, pile ou face ?").setEmbed(build.build()).build();
 	}
 	
 	build.setTitle("**" + res + "**");
 	
-	m = new MessageBuilder().append("Le résultat du tirage entre " + "**" + choix + "**" + " est ...").setEmbed(build.build()).build();
 	msgChannel.sendMessage(m).queue();
     }
     
